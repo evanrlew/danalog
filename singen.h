@@ -16,12 +16,14 @@ struct sin_state {
 	Int32 position;
 	Int32 frequency;
 	Int32 step_delta;
+
 };
 typedef struct sin_state SinState;
 
 Int16 _decompress_sin(Int16 index);
-Int16 sin_gen(SinState *state);
+Int16 sin_gen(SinState *state, Int16 mod);
 void sin_compute_params(SinState *state, Int32 frequency);
+Int16 positive_mod(Int16 i, Int16 n);
 
 
 
