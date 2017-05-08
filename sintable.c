@@ -8,7 +8,8 @@
 #include "sintable.h"
 
 
-Int16 sintable[SINTABLE_LENGTH] = {
+
+const Int16 sintable[SINTABLE_LENGTH] = {
 		0, 26, 51, 77, 103, 129, 154, 180,
 		206, 232, 257, 283, 309, 335, 360, 386,
 		412, 438, 463, 489, 515, 541, 566, 592,

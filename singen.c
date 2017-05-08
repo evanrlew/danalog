@@ -3,7 +3,7 @@
 #include "sintable.h"
 #include "stdio.h"
 
-extern Int16 sintable[];
+extern const Int16 sintable[];
 
 Int16 _decompress_sin(Int16 index) {
 	if (index > SINTABLE_LENGTH * 4 || index < 0) {

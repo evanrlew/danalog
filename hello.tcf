@@ -50,6 +50,37 @@ trace.logType = "circular";
 
 bios.LOG_system.bufLen = 512;
 
+bios.TSK.create("GenSound");
+bios.TSK.instance("GenSound").order = 1
+bios.TSK.instance("GenSound").fxn = prog.extern("gen_sound_tsk");
+bios.POOL.ENABLEPOOL = 1;
+bios.POOL.ENABLEPOOL = 0;
+bios.GBL.MEMORYMODEL = "HUGE";
+bios.GBL.MEMORYMODEL = "LARGE";
+bios.GBL.MEMORYMODEL = "SMALL";
+bios.GBL.MEMORYMODEL = "HUGE";
+bios.GBL.MEMORYMODEL = "LARGE";
+bios.GBL.INSTRUMENTED = 0;
+bios.GBL.ENABLEINST = 0;
+bios.GBL.INSTRUMENTED = 1;
+bios.GBL.ENABLEINST = 1;
+bios.GBL.MEMORYMODEL = "HUGE";
+bios.GBL.MEMORYMODEL = "LARGE";
+bios.HST.HOSTLINKTYPE = "NONE";
+bios.RTDX.ENABLERTDX = 0;
+bios.RTDX.ENABLERTDX = 1;
+bios.HST.HOSTLINKTYPE = "RTDX";
+bios.GBL.ENABLEINST = 0;
+bios.GBL.INSTRUMENTED = 0;
+bios.GBL.ENABLEALLTRC = 0;
+bios.GBL.ENABLEINST = 1;
+bios.GBL.INSTRUMENTED = 1;
+bios.GBL.ENABLEALLTRC = 1;
+bios.RTDX.MODE = "Simulator";
+bios.RTDX.MODE = "JTAG";
+bios.CLK.MICROSECONDS = 100.0000;
+bios.CLK.MICROSECONDS = 25.0000;
+bios.CLK.MICROSECONDS = 500.0000;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {

@@ -12,7 +12,7 @@
 
 #define SINTABLE_LENGTH 2000
 
-extern Int16 sintable[SINTABLE_LENGTH];
+extern const Int16 sintable[SINTABLE_LENGTH];
 
 
 #endif /* SINTABLE_H_ */
