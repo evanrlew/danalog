@@ -17,35 +17,46 @@
 #include "stdio.h"
 #include <log.h>
 
+
+
 #include "ezdsp5535.h"
 #include "ezdsp5535_i2s.h"
 #include "ezdsp5535_i2c.h"
 
 #include "hellocfg.h"
 #include "aic3204.h"
-#include "singen.h"
-#include "sintable.h"
 
 #include "gen_sound.h"
+#include "i2s_dma.h"
 
+#include "csl_intc.h"
+
+extern void VECSTART(void); // defined in vector table
+CSL_IRQ_Dispatch     dispatchTable;
 
 /*
  *  ======== main ========
  */
 Void main()
 {
-		printf("Initializing bsl\n");
-		EZDSP5535_init( );
+	printf("Initializing bsl\n");
+	EZDSP5535_init( );
 
-		printf("Init i2c\n");
-		EZDSP5535_I2C_init( );
+	printf("Init i2c\n");
+	EZDSP5535_I2C_init( );
 
-		printf("init i2s\n");
-		EZDSP5535_I2S_init();
+	//printf("init i2s\n");
+	//EZDSP5535_I2S_init();
 
-		printf("Initializing aic3204\n");
-		aic3204_init();
+	printf("Initializing aic3204\n");
+	aic3204_init();
 
+	printf("Initializing dma with i2s");
+	i2s_dma_init();
+
+
+
+	//IRQ_globalEnable();
 
 
 

@@ -23,6 +23,8 @@
 #include "singen.h"
 #include "sintable.h"
 
+#include "i2s_dma.h"
+
 extern CSL_I2sHandle   hI2s;
 
 
@@ -42,24 +44,25 @@ Void gen_sound_tsk( Void )
 
 	Int16 output, mod_scaled;
 	Int32 mod;
-	ioport  CSL_I2sRegs   *regs;
+//	ioport  CSL_I2sRegs   *regs;
+	Int16 i;
 	while (1) {
-		mod = sin_gen(&ss_mod, 0);
-		mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
+			mod = sin_gen(&ss_mod, 0);
+			mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
 
 
-		output = sin_gen(&ss_carrier, mod_scaled) >> 6;
+			output = sin_gen(&ss_carrier, 0) >> 6;
+			dmaPingSrcBuf[i] = output;
+			TSK_sleep(10);
+		}
+
 //		printf("%d\n", output);
 
 
-	    regs = hI2s->hwRegs;
-		while((CSL_I2S_I2SINTFL_XMITSTFL_MASK & regs->I2SINTFL) == 0) {
-			TSK_sleep(1);
-		}
-
-
-		EZDSP5535_I2S_writeLeft( output );
-		EZDSP5535_I2S_writeRight( output );
+//
+//		EZDSP5535_I2S_writeLeft( output );
+//		EZDSP5535_I2S_writeRight( output );
 	}
 }
 

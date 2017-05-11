@@ -81,6 +81,12 @@ bios.RTDX.MODE = "JTAG";
 bios.CLK.MICROSECONDS = 100.0000;
 bios.CLK.MICROSECONDS = 25.0000;
 bios.CLK.MICROSECONDS = 500.0000;
+bios.GBL.INSTRUMENTED = 0;
+bios.GBL.ENABLEINST = 0;
+bios.MEM.BIOSSEG = prog.get("SARAM");
+bios.MEM.DATASEG = prog.get("SARAM");
+bios.GBL.ENABLEINST = 1;
+bios.GBL.INSTRUMENTED = 1;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {
