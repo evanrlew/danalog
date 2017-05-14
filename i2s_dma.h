@@ -17,6 +17,6 @@ extern Int16 dmaPongSrcBuf[I2S_DMA_BUFFER_SIZE];
 
 
 void i2s_dma_init( void );
-interrupt void DmaIsr(void);
+void dma_isr(void);
 
 #endif /* I2S_DMA_H_ */

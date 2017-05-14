@@ -46,7 +46,7 @@ void i2s_dma_init( void )
 	i2sConfig.fsPol          = I2S_FSPOL_LOW;
 	i2sConfig.clkPol         = I2S_RISING_EDGE; //I2S_FALLING_EDGE;
 	i2sConfig.datadelay      = I2S_DATADELAY_ONEBIT;
-	i2sConfig.datapack       = I2S_DATAPACK_ENABLE;
+	i2sConfig.datapack       = I2S_DATAPACK_DISABLE;
 	i2sConfig.signext        = I2S_SIGNEXT_DISABLE;
 	i2sConfig.wordLen        = I2S_WORDLEN_16;
 	i2sConfig.i2sMode        = I2S_SLAVE;
@@ -91,10 +91,10 @@ void i2s_dma_init( void )
 
 	dmaConfig.pingPongMode = CSL_DMA_PING_PONG_ENABLE;
 	dmaConfig.autoMode     = CSL_DMA_AUTORELOAD_ENABLE;
-	dmaConfig.burstLen     = CSL_DMA_TXBURST_2WORD;
+	dmaConfig.burstLen     = CSL_DMA_TXBURST_1WORD;
 	dmaConfig.trigger      = CSL_DMA_EVENT_TRIGGER;
 	dmaConfig.dmaEvt       = CSL_DMA_EVT_I2S2_TX;
-	dmaConfig.dmaInt       = CSL_DMA_INTERRUPT_DISABLE;
+	dmaConfig.dmaInt       = CSL_DMA_INTERRUPT_ENABLE;
 	dmaConfig.chanDir      = CSL_DMA_WRITE;
 	dmaConfig.trfType      = CSL_DMA_TRANSFER_IO_MEMORY;
 	dmaConfig.dataLen      = I2S_DMA_BUFFER_SIZE * 4;
@@ -109,19 +109,15 @@ void i2s_dma_init( void )
 	DMA_config(dmaHandle, &dmaConfig);
 
 	/* Clear DMA Interrupt Flags */
-	//IRQ_clear(DMA_EVENT);
+	IRQ_clear(DMA_EVENT);
 
 	/* Enable DMA Interrupt */
-	//IRQ_enable(DMA_EVENT);
+	IRQ_enable(DMA_EVENT);
 
 	DMA_start(dmaHandle);
 
 }
 
-void dmaISR(void)
-{
-	CSL_Status status;
-
-	CSL_SYSCTRL_REGS->DMAIFR = 0xFFFF;
-	IRQ_clear(DMA_EVENT);
+void dma_isr(void) {
+	while(1);
 }
