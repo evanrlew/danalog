@@ -16,7 +16,6 @@
 
 #include "csl_gpio.h"
 #include "csl_i2s.h"
-#include "csl_dma.h"
 #include "csl_intc.h"
 #include "csl_sysctrl.h"
 
@@ -27,7 +26,10 @@ Int16 dmaPingSrcBuf[I2S_DMA_BUFFER_SIZE];
 #pragma DATA_ALIGN (dmaPongSrcBuf, 4)
 Int16 dmaPongSrcBuf[I2S_DMA_BUFFER_SIZE];
 
+Int32 isrCounterPing = 0;
+Int32 isrCounterPong = 0;
 
+CSL_DmaRegsOvly dma_reg;
 
 void i2s_dma_init( void )
 {
@@ -76,8 +78,8 @@ void i2s_dma_init( void )
 
 
 
-	/* disable all DMA interrupts */
-	CSL_SYSCTRL_REGS->DMAIER = 0x0000;
+	/* enable ch4 DMA interrupts */
+	CSL_SYSCTRL_REGS->DMAIER = 0x0010;
 
 	/* Clear all DMA interrupt flags */
 	CSL_SYSCTRL_REGS->DMAIFR = 0xFFFF;
@@ -108,6 +110,13 @@ void i2s_dma_init( void )
 	dmaHandle = DMA_open(CSL_DMA_CHAN4, &dmaChannelObj, &status);
 	DMA_config(dmaHandle, &dmaConfig);
 
+//	CSL_DmaRegsOvly dma_reg;
+//	dma_reg = dmaHandle->dmaRegs;
+	if (CSL_DMA0_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
+				isrCounterPing++;
+			} else { // last xfer: ping
+				isrCounterPong++;
+			}
 	/* Clear DMA Interrupt Flags */
 	IRQ_clear(DMA_EVENT);
 
@@ -119,5 +128,11 @@ void i2s_dma_init( void )
 }
 
 void dma_isr(void) {
-	while(1);
+	if (CSL_SYSCTRL_REGS->DMAIFR & 0x0010) { // ch4 interrupt
+
+		CSL_SYSCTRL_REGS->DMAIFR |= 0x0010;
+	} else {
+		while(1);
+	}
+
 }

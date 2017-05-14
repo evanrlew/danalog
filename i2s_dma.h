@@ -10,7 +10,12 @@
 #ifndef I2S_DMA_H_
 #define I2S_DMA_H_
 
+#include "csl_dma.h"
+
 #define I2S_DMA_BUFFER_SIZE 128
+
+extern Int32 isrCounterPing;
+extern Int32 isrCounterPong;
 
 extern Int16 dmaPingSrcBuf[I2S_DMA_BUFFER_SIZE];
 extern Int16 dmaPongSrcBuf[I2S_DMA_BUFFER_SIZE];
