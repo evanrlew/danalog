@@ -89,6 +89,8 @@ bios.GBL.ENABLEINST = 1;
 bios.GBL.INSTRUMENTED = 1;
 bios.HWI.instance("HWI_INT8").fxn = prog.extern("dma_isr");
 bios.HWI.instance("HWI_INT8").useDispatcher = 1;
+bios.TSK.instance("TSK_idle").order = 1;
+bios.TSK.instance("GenSound").destroy();
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {

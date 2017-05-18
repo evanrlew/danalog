@@ -28,7 +28,7 @@
 							<option id="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.105794848" name="Compiler version" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION" value="4.4.1" valueType="string"/>
 							<targetPlatform id="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.targetPlatformDebug.108945513" name="Platform" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.targetPlatformDebug"/>
 							<builder buildPath="${BuildDirectory}" id="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.builderDebug.1458196811" keepEnvironmentInBuildfile="false" name="GNU Make" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.builderDebug"/>
-							<tool id="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.compilerDebug.405337852" name="C5500 Compiler" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.compilerDebug">
+							<tool commandLinePattern="${command} --gcc ${flags} ${inputs}" id="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.compilerDebug.405337852" name="C5500 Compiler" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.compilerDebug">
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.DEFINE.1193858883" name="Pre-define NAME (--define, -D)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.DEFINE" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="c5535"/>
 								</option>
@@ -43,7 +43,7 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.INCLUDE_PATH.181401781" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\ezdsp5535_BSL_RevC\ezdsp5535_v1\include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\ti\c55_lp\c55_csl_3.07\inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\ezdsp5535_BSL_RevC\ezdsp5535_v1\c55xx_csl\inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${TCONF_OUTPUT_DIR}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${BIOS_INCLUDE_DIR}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${RTDX_INCLUDE_DIR}&quot;"/>

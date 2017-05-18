@@ -17,7 +17,9 @@
 #include "csl_gpio.h"
 #include "csl_i2s.h"
 #include "csl_intc.h"
-#include "csl_sysctrl.h"
+
+#include "singen.h"
+#include "sintable.h"
 
 
 #pragma DATA_ALIGN (dmaPingSrcBuf, 4)
@@ -29,10 +31,29 @@ Int16 dmaPongSrcBuf[I2S_DMA_BUFFER_SIZE];
 Int32 isrCounterPing = 0;
 Int32 isrCounterPong = 0;
 
+Int16 freq = 500;
+Int16 mod_ratio = 1;
+Int16 mod_depth = 5;
+
+SinState ss_carrier;
+SinState ss_mod;
+
+Int16 i;
+
+
+Int16 output, mod_scaled;
+Int32 mod;
+
+
 CSL_DmaRegsOvly dma_reg;
 
 void i2s_dma_init( void )
 {
+
+
+	sin_compute_params(&ss_carrier, freq);
+	sin_compute_params(&ss_mod, freq * mod_ratio);
+
 	CSL_Status 			status;
 
 	// Configure I2S
@@ -109,14 +130,9 @@ void i2s_dma_init( void )
 
 	dmaHandle = DMA_open(CSL_DMA_CHAN4, &dmaChannelObj, &status);
 	DMA_config(dmaHandle, &dmaConfig);
+	dma_reg = dmaHandle->dmaRegs;
 
-//	CSL_DmaRegsOvly dma_reg;
-//	dma_reg = dmaHandle->dmaRegs;
-	if (CSL_DMA0_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
-				isrCounterPing++;
-			} else { // last xfer: ping
-				isrCounterPong++;
-			}
+
 	/* Clear DMA Interrupt Flags */
 	IRQ_clear(DMA_EVENT);
 
@@ -129,8 +145,30 @@ void i2s_dma_init( void )
 
 void dma_isr(void) {
 	if (CSL_SYSCTRL_REGS->DMAIFR & 0x0010) { // ch4 interrupt
+		if (dma_reg->DMACH0TCR2 & 0x0002) { // last xfer: pong
+			isrCounterPing++;
 
-		CSL_SYSCTRL_REGS->DMAIFR |= 0x0010;
+			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
+				mod = sin_gen(&ss_mod, 0);
+				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+
+
+				output = sin_gen(&ss_carrier, 0) >> 6;
+				dmaPongSrcBuf[i] = output;
+			}
+		} else { // last xfer: ping
+			isrCounterPong++;
+
+			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
+				mod = sin_gen(&ss_mod, 0);
+				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+
+
+				output = sin_gen(&ss_carrier, 0) >> 6;
+				dmaPingSrcBuf[i] = output;
+			}
+		}
+		CSL_SYSCTRL_REGS->DMAIFR |= 0x0010; // clear interrupt
 	} else {
 		while(1);
 	}
