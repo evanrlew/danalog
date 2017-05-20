@@ -149,8 +149,8 @@ void dma_isr(void) {
 			isrCounterPing++;
 
 			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-				mod = sin_gen(&ss_mod, 0);
-				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+				//mod = sin_gen(&ss_mod, 0);
+				//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
 
 
 				output = sin_gen(&ss_carrier, 0) >> 6;
@@ -160,8 +160,8 @@ void dma_isr(void) {
 			isrCounterPong++;
 
 			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-				mod = sin_gen(&ss_mod, 0);
-				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+				//mod = sin_gen(&ss_mod, 0);
+				//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
 
 
 				output = sin_gen(&ss_carrier, 0) >> 6;

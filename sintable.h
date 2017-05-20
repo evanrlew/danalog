@@ -10,7 +10,7 @@
 
 #include "ezdsp5535.h"
 
-#define SINTABLE_LENGTH 2000
+#define SINTABLE_LENGTH 2048
 
 extern const Int16 sintable[SINTABLE_LENGTH];
 
