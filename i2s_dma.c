@@ -42,7 +42,7 @@ Int16 i;
 
 
 Int16 output, mod_scaled;
-Int32 mod;
+Int16 mod;
 
 
 CSL_DmaRegsOvly dma_reg;
@@ -145,26 +145,32 @@ void i2s_dma_init( void )
 
 void dma_isr(void) {
 	if (CSL_SYSCTRL_REGS->DMAIFR & 0x0010) { // ch4 interrupt
+		Int16 i;
+		Int16 output, mod_scaled;
+		Int32 mod;
+
 		if (dma_reg->DMACH0TCR2 & 0x0002) { // last xfer: pong
 			isrCounterPing++;
 
+#pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
 			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-				//mod = sin_gen(&ss_mod, 0);
-				//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+				mod = sin_gen(&ss_mod, 0);
+				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
 
 
-				output = sin_gen(&ss_carrier, 0) >> 6;
+				output = sin_gen(&ss_carrier, mod_scaled) >> 6;
 				dmaPongSrcBuf[i] = output;
 			}
 		} else { // last xfer: ping
 			isrCounterPong++;
 
+#pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
 			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-				//mod = sin_gen(&ss_mod, 0);
-				//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+				mod = sin_gen(&ss_mod, 0);
+				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
 
 
-				output = sin_gen(&ss_carrier, 0) >> 6;
+				output = sin_gen(&ss_carrier, mod_scaled) >> 6;
 				dmaPingSrcBuf[i] = output;
 			}
 		}
