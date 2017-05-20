@@ -31,9 +31,9 @@ Int16 dmaPongSrcBuf[I2S_DMA_BUFFER_SIZE];
 Int32 isrCounterPing = 0;
 Int32 isrCounterPong = 0;
 
-Int16 freq = 500;
+Int16 freq = 100;
 Int16 mod_ratio = 1;
-Int16 mod_depth = 5;
+Int16 mod_depth = 1;
 
 SinState ss_carrier;
 SinState ss_mod;
@@ -155,8 +155,8 @@ void dma_isr(void) {
 #pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
 			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
 				mod = sin_gen(&ss_mod, 0);
-				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
-
+				//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+				mod_scaled = (mod >> 3) * mod_depth;
 
 				output = sin_gen(&ss_carrier, mod_scaled) >> 6;
 				dmaPongSrcBuf[i] = output;
@@ -167,7 +167,8 @@ void dma_isr(void) {
 #pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
 			for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
 				mod = sin_gen(&ss_mod, 0);
-				mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+				//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+				mod_scaled = (mod >> 3) * mod_depth;
 
 
 				output = sin_gen(&ss_carrier, mod_scaled) >> 6;
