@@ -112,6 +112,7 @@ void i2s_dma_init( void )
 	CSL_DMA_Config 		dmaConfig;
 	CSL_DMA_ChannelObj  dmaChannelObj;
 
+	// Left DMA config
 	dmaConfig.pingPongMode = CSL_DMA_PING_PONG_ENABLE;
 	dmaConfig.autoMode     = CSL_DMA_AUTORELOAD_ENABLE;
 	dmaConfig.burstLen     = CSL_DMA_TXBURST_1WORD;
@@ -123,10 +124,6 @@ void i2s_dma_init( void )
 	dmaConfig.dataLen      = I2S_DMA_BUFFER_SIZE * 4;
 	dmaConfig.srcAddr      = (Uint32)dmaPingSrcBuf;
 	dmaConfig.destAddr     = (Uint32)0x2A08;
-
-
-
-
 
 	dmaHandle = DMA_open(CSL_DMA_CHAN4, &dmaChannelObj, &status);
 	DMA_config(dmaHandle, &dmaConfig);
@@ -144,12 +141,12 @@ void i2s_dma_init( void )
 }
 
 void dma_isr(void) {
-	if (CSL_SYSCTRL_REGS->DMAIFR & 0x0010) { // ch4 interrupt
+	if (CSL_SYSCTRL_REGS->DMAIFR & 0x0010) { // ch4 interrupt, left channel
 		Int16 i;
 		Int16 output, mod_scaled;
 		Int32 mod;
 
-		if (dma_reg->DMACH0TCR2 & 0x0002) { // last xfer: pong
+		if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
 			isrCounterPing++;
 
 #pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
