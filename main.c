@@ -85,20 +85,23 @@ Void main()
 
 	hwConfig.spiClkDiv	= 100;
 	hwConfig.wLen		= SPI_WORD_LENGTH_8;
-	hwConfig.frLen		= 1;
+	hwConfig.frLen		= 4;
 	hwConfig.wcEnable	= SPI_WORD_IRQ_ENABLE;
 	hwConfig.fcEnable	= SPI_FRAME_IRQ_DISABLE;
 	hwConfig.csNum		= SPI_CS_NUM_1;
 	hwConfig.dataDelay	= SPI_DATA_DLY_0;
 	hwConfig.csPol		= SPI_CSP_ACTIVE_LOW;
 	hwConfig.clkPol		= SPI_CLKP_LOW_AT_IDLE;
-	hwConfig.clkPh		= SPI_CLK_PH_FALL_EDGE;
+	hwConfig.clkPh		= SPI_CLK_PH_RISE_EDGE;
 
 	SPI_config(hSpi, &hwConfig);
 
 	// enable level shifter
+	CSL_GpioObj    gpioObj;
 	CSL_GpioObj    *hGpio;
-	GPIO_reset(hGpio);
+	CSL_Status     status;
+
+    hGpio = GPIO_open(&gpioObj, &status);
 
 	/* Configure GPIO pin 0 as output pin */
 	CSL_GpioPinConfig    config;
