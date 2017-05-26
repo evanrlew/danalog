@@ -13,24 +13,28 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include <std.h>
-#include "stdio.h"
+/* Standard C includes */
+#include <stdio.h>
+
+/* DSP/BIOS headers */
 #include <log.h>
 #include <tsk.h>
+#include "hellocfg.h"
 
-
-
+/* ezDSP C5535 board specific headers */
 #include "ezdsp5535.h"
-#include "ezdsp5535_i2s.h"
 #include "ezdsp5535_i2c.h"
 
-#include "hellocfg.h"
+/* C55xx chip support library headers */
+
+
+/* Danalog headers */
 #include "aic3204.h"
 #include "i2s_dma.h"
 #include "spi_config.h"
+#include "global_vars.h"
 
-#include "csl_general.h"
-#include "csl_intc.h"
+
 
 
 /*
@@ -44,9 +48,6 @@ Void main()
 	printf("Init i2c\n");
 	EZDSP5535_I2C_init( );
 
-	//printf("init i2s\n");
-	//EZDSP5535_I2S_init();
-
 	printf("Initializing aic3204\n");
 	aic3204_init();
 
@@ -56,30 +57,53 @@ Void main()
 	printf("Initializing spi");
 	spi_init();
 
-//	Uint16 receive_arr[40];
-//	int i;
-//	for (i = 0; i<40; i++) {
-//		receive_arr[i] = 0;
-//	}
-//    Uint16 message = SPI_SWT_CMD;
-//	while(1) {
-//		EZDSP5535_waitusec( 100 );
-//		spi_write(&message, 1);
-//		spi_read(receive_arr, 1);
-//	}
-
     /* fall into DSP/BIOS idle loop */
 }
 
-Void spi_tsk_fxn( void )
+Void spi_get_midi( void )
 {
 	while (1) {
-		Uint16 message = SPI_SWT_CMD;
-		Uint16 receive_arr[40];
-		//TSK_disable();
+		Uint16 message = SPI_MIDI_CMD;
+		TSK_disable();
 		spi_write(&message, 1);
-		spi_read(receive_arr, 1);
-		//TSK_enable();
-		TSK_sleep(4);
+		spi_read(midi, 2);
+		TSK_enable();
+		TSK_sleep(2);
+	}
+}
+
+Void spi_get_interface_controls( void )
+{
+	Uint16 counter = 0;
+	Uint16 message;
+	while (1) {
+		switch(counter) {
+		case 0:
+			message = SPI_SWT_CMD;
+			TSK_disable();
+			spi_write(&message, 1);
+			spi_read(&switches, 1);
+			TSK_enable();
+			break;
+		case 1:
+			message = SPI_ENC_CMD;
+			TSK_disable();
+			spi_write(&message, 1);
+			spi_read(encoders, 19);
+			TSK_enable();
+			break;
+		case 2:
+			message = SPI_POT_CMD;
+			TSK_disable();
+			spi_write(&message, 1);
+			spi_read(pots, 8);
+			TSK_enable();
+			break;
+		default:
+			while (1); // error
+		}
+
+		counter = (counter + 1) % 3;
+		TSK_sleep(10); // service every 5ms
 	}
 }

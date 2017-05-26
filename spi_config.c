@@ -8,7 +8,7 @@
 #include "spi_config.h"
 #include "csl_gpio.h"
 
-#define SPI_RW_WAIT 12
+#define SPI_RW_WAIT 25
 
 SPI_Config		spi_hwConfig;
 

@@ -99,6 +99,13 @@ bios.TSK.instance("spi_tsk").order = 2;
 bios.TSK.instance("spi_tsk").fxn = prog.extern("spi_tsk");
 
 bios.TSK.instance("spi_tsk").fxn = prog.extern("spi_tsk_fxn");
+bios.TSK.instance("spi_tsk").destroy();
+bios.TSK.create("spiSlow");
+bios.TSK.instance("spiSlow").order = 3;
+bios.TSK.create("spiFast");
+bios.TSK.instance("spiFast").order = 4;
+bios.TSK.instance("spiSlow").fxn = prog.extern("spi_get_interface_controls");
+bios.TSK.instance("spiFast").fxn = prog.extern("spi_get_midi");
 bios.MEM.CONSTSEG = prog.get("SARAM");
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
