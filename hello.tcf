@@ -107,6 +107,22 @@ bios.TSK.instance("spiFast").order = 4;
 bios.TSK.instance("spiSlow").fxn = prog.extern("spi_get_interface_controls");
 bios.TSK.instance("spiFast").fxn = prog.extern("spi_get_midi");
 bios.MEM.CONSTSEG = prog.get("SARAM");
+bios.HWI.instance("HWI_INT8").fxn = prog.extern("HWI_unused", "asm");
+bios.HWI.instance("HWI_INT8").useDispatcher = 0;
+bios.TSK.create("audio");
+bios.TSK.instance("audio").order = 5;
+bios.TSK.instance("audio").fxn = prog.extern("gen_sound_tsk");
+bios.TSK.instance("audio").order = 1;
+bios.TSK.instance("TSK_idle").order = 2;
+bios.TSK.instance("audio").priority = 2;
+bios.MEM.CIOSEG = prog.get("SARAM");
+bios.TSK.instance("audio").fxn = prog.extern("generate_samples_tsk");
+bios.MEM.TEXTSEG = prog.get("SARAM");
+bios.SEM.create("ping_pong_sem");
+bios.HWI.instance("HWI_INT8").fxn = prog.extern("dma_isr");
+bios.HWI.instance("HWI_INT8").useDispatcher = 1;
+bios.CLK.MICROSECONDS = 100.0000;
+bios.CLK.MICROSECONDS = 200.0000;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {

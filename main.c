@@ -49,7 +49,7 @@ Void spi_get_midi( void )
 		spi_write(&message, 1);
 		spi_read(midi, 2);
 		TSK_enable();
-		TSK_sleep(2);
+		TSK_sleep(5);
 	}
 }
 
@@ -85,6 +85,6 @@ Void spi_get_interface_controls( void )
 		}
 
 		counter = (counter + 1) % 3;
-		TSK_sleep(10); // service every 5ms
+		TSK_sleep(25); // service every 5ms
 	}
 }

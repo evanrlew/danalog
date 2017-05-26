@@ -10,7 +10,6 @@
 
 #include <std.h>
 
-Void gen_sound_tsk( Void );
 
 
 #endif /* GEN_SOUND_H_ */

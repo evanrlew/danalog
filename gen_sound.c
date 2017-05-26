@@ -28,9 +28,9 @@
 extern CSL_I2sHandle   hI2s;
 
 
-Void gen_sound_tsk( Void )
+Void generate_samples_tsk( Void )
 {
-	Int16 freq = 500;
+	Int16 freq = 100;
 	Int16 mod_ratio = 1;
 	Int16 mod_depth = 5;
 
@@ -42,28 +42,24 @@ Void gen_sound_tsk( Void )
 
 
 
-	Int16 output, mod_scaled;
-	Int32 mod;
-//	ioport  CSL_I2sRegs   *regs;
+	Int16 *output;
+	Int32 mod, mod_scaled;
 	Int16 i;
 	while (1) {
-		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-			mod = sin_gen(&ss_mod, 0);
-			mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
-
-
-			output = sin_gen(&ss_carrier, 0) >> 6;
-			dmaPingSrcBuf[i] = output;
-			TSK_sleep(10);
+		SEM_pend(&ping_pong_sem, SYS_FOREVER);
+		if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
+			output = dmaPongSrcBuf;
+		} else {
+			output = dmaPingSrcBuf;
 		}
 
-//		printf("%d\n", output);
+#pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
+		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
+			mod = sin_gen(&ss_mod, 0);
+			//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+			mod_scaled = (mod >> 3) * mod_depth;
 
-
-//
-//		EZDSP5535_I2S_writeLeft( output );
-//		EZDSP5535_I2S_writeRight( output );
-	}
+			output[i] = sin_gen(&ss_carrier, mod_scaled) >> 6;
+		} // end for
+	} // end while (1)
 }
-
-
