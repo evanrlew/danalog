@@ -28,7 +28,7 @@
 extern CSL_I2sHandle   hI2s;
 
 
-Void gen_sound_tsk( Void )
+Void generate_samples_tsk( Void )
 {
 	Int16 freq = 500;
 	Int16 mod_ratio = 1;
@@ -47,6 +47,9 @@ Void gen_sound_tsk( Void )
 //	ioport  CSL_I2sRegs   *regs;
 	Int16 i;
 	while (1) {
+		//SEM_pend(&ping_pong_sem, SYS_FOREVER);
+		// find which buffer to write too
+
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
 			mod = sin_gen(&ss_mod, 0);
 			mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
@@ -54,16 +57,7 @@ Void gen_sound_tsk( Void )
 
 			output = sin_gen(&ss_carrier, 0) >> 6;
 			dmaPingSrcBuf[i] = output;
-			TSK_sleep(10);
 		}
 
-//		printf("%d\n", output);
-
-
-//
-//		EZDSP5535_I2S_writeLeft( output );
-//		EZDSP5535_I2S_writeRight( output );
 	}
 }
-
-

@@ -22,7 +22,7 @@ void spi_init( void ) {
 	volatile Uint16 delay;
 	ioport volatile CSL_SysRegs	*sysRegs;
 
-//	sysRegs = (CSL_SysRegs *)CSL_SYSCTRL_REGS;
+	sysRegs = (CSL_SysRegs *)CSL_SYSCTRL_REGS;
 //	CSL_FINS(sysRegs->PCGCR1, SYS_PCGCR1_SPICG, CSL_SYS_PCGCR1_SPICG_ACTIVE);
 //
 //	/* Value of 'Reset Counter' */
