@@ -12,7 +12,7 @@
 
 #include "csl_dma.h"
 
-#define I2S_DMA_BUFFER_SIZE 32
+#define I2S_DMA_BUFFER_SIZE 128
 
 extern Int32 isrCounterPing;
 extern Int32 isrCounterPong;

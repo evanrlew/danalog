@@ -120,6 +120,9 @@ bios.TSK.instance("audio").fxn = prog.extern("generate_samples_tsk");
 bios.MEM.TEXTSEG = prog.get("SARAM");
 bios.SEM.create("ping_pong_sem");
 bios.HWI.instance("HWI_INT8").fxn = prog.extern("dma_isr");
+bios.HWI.instance("HWI_INT8").useDispatcher = 1;
+bios.CLK.MICROSECONDS = 100.0000;
+bios.CLK.MICROSECONDS = 200.0000;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {
