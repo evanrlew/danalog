@@ -17,25 +17,23 @@ void spi_init( void ) {
 	 *    Configure SPI peripheral   *
 	 *********************************/
 
-
-
 	// Copy and paste from CSL, but changed
 	// pin multiplexing mode to PPMODE_MODE6
 	volatile Uint16 delay;
 	ioport volatile CSL_SysRegs	*sysRegs;
 
-	sysRegs = (CSL_SysRegs *)CSL_SYSCTRL_REGS;
-	CSL_FINS(sysRegs->PCGCR1, SYS_PCGCR1_SPICG, CSL_SYS_PCGCR1_SPICG_ACTIVE);
-
-	/* Value of 'Reset Counter' */
-	CSL_FINS(sysRegs->PSRCR, SYS_PSRCR_COUNT, 0x20);
-
-	CSL_FINS(sysRegs->PRCR, SYS_PRCR_PG4_RST, CSL_SYS_PRCR_PG4_RST_RST);
+//	sysRegs = (CSL_SysRegs *)CSL_SYSCTRL_REGS;
+//	CSL_FINS(sysRegs->PCGCR1, SYS_PCGCR1_SPICG, CSL_SYS_PCGCR1_SPICG_ACTIVE);
+//
+//	/* Value of 'Reset Counter' */
+//	CSL_FINS(sysRegs->PSRCR, SYS_PSRCR_COUNT, 0x20);
+//
+//	CSL_FINS(sysRegs->PRCR, SYS_PRCR_PG4_RST, CSL_SYS_PRCR_PG4_RST_RST);
 
 	for(delay = 0; delay < 100; delay++);
 
 
-	CSL_FINS(sysRegs->EBSR, SYS_EBSR_PPMODE, CSL_SYS_EBSR_PPMODE_MODE6);
+	CSL_FINS(sysRegs->EBSR, SYS_EBSR_PPMODE, CSL_SYS_EBSR_PPMODE_MODE1);
 	// End of CSL copy paste
 
 	hSpi = SPI_open(SPI_CS_NUM_1, SPI_POLLING_MODE);
