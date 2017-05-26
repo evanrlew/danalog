@@ -16,6 +16,7 @@
 #include <std.h>
 #include "stdio.h"
 #include <log.h>
+#include <tsk.h>
 
 
 
@@ -55,17 +56,30 @@ Void main()
 	printf("Initializing spi");
 	spi_init();
 
-	Uint16 receive_arr[40];
-	int i;
-	for (i = 0; i<40; i++) {
-		receive_arr[i] = 0;
-	}
-    Uint16 message = SPI_SWT_CMD;
-	while(1) {
-		spi_write(&message, 1);
-		EZDSP5535_waitusec( 10 );
-		spi_read(receive_arr, 1);
-	}
+//	Uint16 receive_arr[40];
+//	int i;
+//	for (i = 0; i<40; i++) {
+//		receive_arr[i] = 0;
+//	}
+//    Uint16 message = SPI_SWT_CMD;
+//	while(1) {
+//		EZDSP5535_waitusec( 100 );
+//		spi_write(&message, 1);
+//		spi_read(receive_arr, 1);
+//	}
 
     /* fall into DSP/BIOS idle loop */
+}
+
+Void spi_tsk_fxn( void )
+{
+	while (1) {
+		Uint16 message = SPI_SWT_CMD;
+		Uint16 receive_arr[40];
+		//TSK_disable();
+		spi_write(&message, 1);
+		spi_read(receive_arr, 1);
+		//TSK_enable();
+		TSK_sleep(4);
+	}
 }

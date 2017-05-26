@@ -94,6 +94,12 @@ bios.TSK.instance("GenSound").destroy();
 bios.MEM.BIOSSEG = prog.get("DARAM");
 bios.MEM.SYSINITSEG = prog.get("SARAM");
 bios.MEM.BIOSSEG = prog.get("SARAM");
+bios.TSK.create("spi_tsk");
+bios.TSK.instance("spi_tsk").order = 2;
+bios.TSK.instance("spi_tsk").fxn = prog.extern("spi_tsk");
+
+bios.TSK.instance("spi_tsk").fxn = prog.extern("spi_tsk_fxn");
+bios.MEM.CONSTSEG = prog.get("SARAM");
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {
