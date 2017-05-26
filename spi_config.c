@@ -6,15 +6,16 @@
  */
 
 #include "spi_config.h"
-
 #include "csl_gpio.h"
+
+SPI_Config		spi_hwConfig;
 
 void spi_init( void ) {
 	/*********************************
 	 *    Configure SPI peripheral   *
 	 *********************************/
 
-	SPI_Config		hwConfig;
+
 
 	// Copy and paste from CSL, but changed
 	// pin multiplexing mode to PPMODE_MODE6
@@ -37,18 +38,18 @@ void spi_init( void ) {
 
 	hSpi = SPI_open(SPI_CS_NUM_1, SPI_POLLING_MODE);
 
-	hwConfig.spiClkDiv	= 100;
-	hwConfig.wLen		= SPI_WORD_LENGTH_8;
-	hwConfig.frLen		= 4;
-	hwConfig.wcEnable	= SPI_WORD_IRQ_ENABLE;
-	hwConfig.fcEnable	= SPI_FRAME_IRQ_DISABLE;
-	hwConfig.csNum		= SPI_CS_NUM_1;
-	hwConfig.dataDelay	= SPI_DATA_DLY_0;
-	hwConfig.csPol		= SPI_CSP_ACTIVE_LOW;
-	hwConfig.clkPol		= SPI_CLKP_LOW_AT_IDLE;
-	hwConfig.clkPh		= SPI_CLK_PH_RISE_EDGE;
+	spi_hwConfig.spiClkDiv	= 100;
+	spi_hwConfig.wLen		= SPI_WORD_LENGTH_8;
+	spi_hwConfig.frLen		= 1;
+	spi_hwConfig.wcEnable	= SPI_WORD_IRQ_DISABLE;
+	spi_hwConfig.fcEnable	= SPI_FRAME_IRQ_DISABLE;
+	spi_hwConfig.csNum		= SPI_CS_NUM_1;
+	spi_hwConfig.dataDelay	= SPI_DATA_DLY_0;
+	spi_hwConfig.csPol		= SPI_CSP_ACTIVE_LOW;
+	spi_hwConfig.clkPol		= SPI_CLKP_LOW_AT_IDLE;
+	spi_hwConfig.clkPh		= SPI_CLK_PH_RISE_EDGE;
 
-	SPI_config(hSpi, &hwConfig);
+	SPI_config(hSpi, &spi_hwConfig);
 
 	/*********************************************
 	*      Enable level shifter (set OE high)    *
@@ -70,10 +71,14 @@ void spi_init( void ) {
 }
 
 void spi_write( Uint16 *write_buf, Uint16 buf_len ) {
+	spi_hwConfig.frLen = buf_len;
+	SPI_config(hSpi, &spi_hwConfig);
 	SPI_write(hSpi, write_buf, buf_len);
 }
 
 void spi_read( Uint16 *read_buf, Uint16 buf_len ) {
+	spi_hwConfig.frLen = buf_len;
+	SPI_config(hSpi, &spi_hwConfig);
 	SPI_read(hSpi, read_buf, buf_len);
 }
 

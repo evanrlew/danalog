@@ -55,10 +55,15 @@ Void main()
 	printf("Initializing spi");
 	spi_init();
 
-	Uint16 test_array[5] = {1,2,3,4,5};
-
-	while(1){
-		spi_write(test_array, 5);
+	Uint16 receive_arr[40];
+	int i;
+	for (i = 0; i<40; i++) {
+		receive_arr[i] = 0;
+	}
+    Uint16 message = 0x01;
+	while(1) {
+		spi_write(&message, 1);
+		spi_read(receive_arr, 19);
 	}
 
     /* fall into DSP/BIOS idle loop */
