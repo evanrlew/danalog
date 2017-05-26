@@ -25,14 +25,12 @@
 
 #include "hellocfg.h"
 #include "aic3204.h"
-
-#include "gen_sound.h"
 #include "i2s_dma.h"
+#include "spi_config.h"
 
+#include "csl_general.h"
 #include "csl_intc.h"
 
-extern void VECSTART(void); // defined in vector table
-CSL_IRQ_Dispatch     dispatchTable;
 
 /*
  *  ======== main ========
@@ -54,11 +52,20 @@ Void main()
 	printf("Initializing dma with i2s");
 	i2s_dma_init();
 
+	printf("Initializing spi");
+	spi_init();
 
-
-	//IRQ_globalEnable();
-
-
+	Uint16 receive_arr[40];
+	int i;
+	for (i = 0; i<40; i++) {
+		receive_arr[i] = 0;
+	}
+    Uint16 message = SPI_SWT_CMD;
+	while(1) {
+		spi_write(&message, 1);
+		EZDSP5535_waitusec( 10 );
+		spi_read(receive_arr, 1);
+	}
 
     /* fall into DSP/BIOS idle loop */
 }
