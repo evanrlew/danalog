@@ -24,14 +24,18 @@
 #include "sintable.h"
 
 
-#pragma DATA_ALIGN (dmaPingSrcBuf, 4)
-Int16 dmaPingSrcBuf[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (left_ping, 4)
+Int16 left_ping[I2S_DMA_BUFFER_SIZE];
 
-#pragma DATA_ALIGN (dmaPongSrcBuf, 4)
-Int16 dmaPongSrcBuf[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (left_pong, 4)
+Int16 left_pong[I2S_DMA_BUFFER_SIZE];
 
-Int32 isrCounterPing = 0;
-Int32 isrCounterPong = 0;
+#pragma DATA_ALIGN (right_ping, 4)
+Int16 right_ping[I2S_DMA_BUFFER_SIZE];
+
+#pragma DATA_ALIGN (right_pong, 4)
+Int16 right_pong[I2S_DMA_BUFFER_SIZE];
+
 
 Int16 freq = 100;
 Int16 mod_ratio = 1;
@@ -110,26 +114,51 @@ void i2s_dma_init( void )
 
 
 	// Configure DMA
-	CSL_DMA_Handle 		dmaHandle;
-	CSL_DMA_Config 		dmaConfig;
-	CSL_DMA_ChannelObj  dmaChannelObj;
 
 	// Left DMA config
-	dmaConfig.pingPongMode = CSL_DMA_PING_PONG_ENABLE;
-	dmaConfig.autoMode     = CSL_DMA_AUTORELOAD_ENABLE;
-	dmaConfig.burstLen     = CSL_DMA_TXBURST_1WORD;
-	dmaConfig.trigger      = CSL_DMA_EVENT_TRIGGER;
-	dmaConfig.dmaEvt       = CSL_DMA_EVT_I2S2_TX;
-	dmaConfig.dmaInt       = CSL_DMA_INTERRUPT_ENABLE;
-	dmaConfig.chanDir      = CSL_DMA_WRITE;
-	dmaConfig.trfType      = CSL_DMA_TRANSFER_IO_MEMORY;
-	dmaConfig.dataLen      = I2S_DMA_BUFFER_SIZE * 4;
-	dmaConfig.srcAddr      = (Uint32)dmaPingSrcBuf;
-	dmaConfig.destAddr     = (Uint32)0x2A08;
+	CSL_DMA_Handle 		left_dmaHandle;
+	CSL_DMA_Config 		left_dmaConfig;
+	CSL_DMA_ChannelObj  left_dmaChannelObj;
 
-	dmaHandle = DMA_open(CSL_DMA_CHAN4, &dmaChannelObj, &status);
-	DMA_config(dmaHandle, &dmaConfig);
-	dma_reg = dmaHandle->dmaRegs;
+	left_dmaConfig.pingPongMode = CSL_DMA_PING_PONG_ENABLE;
+	left_dmaConfig.autoMode     = CSL_DMA_AUTORELOAD_ENABLE;
+	left_dmaConfig.burstLen     = CSL_DMA_TXBURST_1WORD;
+	left_dmaConfig.trigger      = CSL_DMA_EVENT_TRIGGER;
+	left_dmaConfig.dmaEvt       = CSL_DMA_EVT_I2S2_TX;
+	left_dmaConfig.dmaInt       = CSL_DMA_INTERRUPT_ENABLE;
+	left_dmaConfig.chanDir      = CSL_DMA_WRITE;
+	left_dmaConfig.trfType      = CSL_DMA_TRANSFER_IO_MEMORY;
+	left_dmaConfig.dataLen      = I2S_DMA_BUFFER_SIZE * 4;
+	left_dmaConfig.srcAddr      = (Uint32)left_ping;
+	left_dmaConfig.destAddr     = (Uint32)0x2A08;
+
+	left_dmaHandle = DMA_open(CSL_DMA_CHAN4, &left_dmaChannelObj, &status);
+	DMA_config(left_dmaHandle, &left_dmaConfig);
+	dma_reg = left_dmaHandle->dmaRegs;
+	DMA_start(left_dmaHandle);
+
+	// Left DMA config
+	CSL_DMA_Handle 		right_dmaHandle;
+	CSL_DMA_Config 		right_dmaConfig;
+	CSL_DMA_ChannelObj  right_dmaChannelObj;
+
+	right_dmaConfig.pingPongMode = CSL_DMA_PING_PONG_ENABLE;
+	right_dmaConfig.autoMode     = CSL_DMA_AUTORELOAD_ENABLE;
+	right_dmaConfig.burstLen     = CSL_DMA_TXBURST_1WORD;
+	right_dmaConfig.trigger      = CSL_DMA_EVENT_TRIGGER;
+	right_dmaConfig.dmaEvt       = CSL_DMA_EVT_I2S2_TX;
+	right_dmaConfig.dmaInt       = CSL_DMA_INTERRUPT_DISABLE; // rely on iterrupt from left
+	right_dmaConfig.chanDir      = CSL_DMA_WRITE;
+	right_dmaConfig.trfType      = CSL_DMA_TRANSFER_IO_MEMORY;
+	right_dmaConfig.dataLen      = I2S_DMA_BUFFER_SIZE * 4;
+	right_dmaConfig.srcAddr      = (Uint32)right_ping;
+	right_dmaConfig.destAddr     = (Uint32)0x2A0C;
+
+	right_dmaHandle = DMA_open(CSL_DMA_CHAN5, &right_dmaChannelObj, &status);
+	DMA_config(right_dmaHandle, &right_dmaConfig);
+	dma_reg = right_dmaHandle->dmaRegs;
+	DMA_start(right_dmaHandle);
+
 
 
 	/* Clear DMA Interrupt Flags */
@@ -138,7 +167,7 @@ void i2s_dma_init( void )
 	/* Enable DMA Interrupt */
 	IRQ_enable(DMA_EVENT);
 
-	DMA_start(dmaHandle);
+
 
 
 
