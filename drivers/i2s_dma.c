@@ -20,8 +20,6 @@
 #include "csl_i2s.h"
 #include "csl_intc.h"
 
-#include "singen.h"
-#include "sintable.h"
 
 
 #pragma DATA_ALIGN (left_ping, 4)
@@ -37,28 +35,13 @@ Int16 right_ping[I2S_DMA_BUFFER_SIZE];
 Int16 right_pong[I2S_DMA_BUFFER_SIZE];
 
 
-Int16 freq = 100;
-Int16 mod_ratio = 1;
-Int16 mod_depth = 1;
 
-SinState ss_carrier;
-SinState ss_mod;
-
-Int16 i;
-
-
-Int16 output, mod_scaled;
-Int16 mod;
 
 
 CSL_DmaRegsOvly dma_reg;
 
 void i2s_dma_init( void )
 {
-
-
-	sin_compute_params(&ss_carrier, freq);
-	sin_compute_params(&ss_mod, freq * mod_ratio);
 
 	CSL_Status 			status;
 
@@ -177,7 +160,6 @@ void dma_isr(void) {
 	if (CSL_SYSCTRL_REGS->DMAIFR & 0x0010) { // ch4 interrupt, left channel
 		SEM_post(&ping_pong_sem);
 		CSL_SYSCTRL_REGS->DMAIFR |= 0x0010; // clear interrupt
-
 	} else {
 		while(1);
 	}

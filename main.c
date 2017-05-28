@@ -14,9 +14,9 @@
 
 
 /* Danalog headers */
-#include "aic3204.h"
-#include "i2s_dma.h"
-#include "spi_config.h"
+#include "drivers/aic3204.h"
+#include "drivers/i2s_dma.h"
+#include "drivers/spi_config.h"
 #include "global_vars.h"
 
 

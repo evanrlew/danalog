@@ -19,11 +19,10 @@
 #include "ezdsp5535_i2c.h"
 #include "csl_i2s.h"
 
-#include "aic3204.h"
-#include "singen.h"
-#include "sintable.h"
+#include "../audio/singen.h"
+#include "../audio/sintable.h"
 
-#include "i2s_dma.h"
+#include "../drivers/i2s_dma.h"
 
 extern CSL_I2sHandle   hI2s;
 
