@@ -13,7 +13,7 @@
 extern Uint16 encoders[19];
 extern Uint16 pots[8];
 extern Uint16 switches;
-extern Uint16 midi[2];
+extern Uint16 midi[3];
 
 
 #endif /* GLOBAL_VARS_H_ */

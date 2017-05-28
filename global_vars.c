@@ -9,5 +9,5 @@
 Uint16 encoders[19];
 Uint16 pots[8];
 Uint16 switches;
-Uint16 midi[2];
+Uint16 midi[3];
 

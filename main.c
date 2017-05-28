@@ -47,7 +47,7 @@ Void spi_get_midi( void )
 		Uint16 message = SPI_MIDI_CMD;
 		TSK_disable();
 		spi_write(&message, 1);
-		spi_read(midi, 2);
+		spi_read(midi, 3);
 		TSK_enable();
 		TSK_sleep(5);
 	}
