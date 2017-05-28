@@ -20,6 +20,8 @@
 #include "csl_i2s.h"
 #include "csl_intc.h"
 
+#include "../global_vars.h"
+
 
 
 #pragma DATA_ALIGN (left_ping, 4)

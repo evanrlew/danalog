@@ -17,6 +17,7 @@
 #include "drivers/aic3204.h"
 #include "drivers/i2s_dma.h"
 #include "drivers/spi_config.h"
+#include "fm/midi_queue.h"
 #include "global_vars.h"
 
 
@@ -36,6 +37,7 @@ Void main()
 	i2s_dma_init();
 
 	printf("Initializing spi");
+	midi_buffer_init();
 	spi_init();
 
     /* fall into DSP/BIOS idle loop */
@@ -46,10 +48,22 @@ Void spi_get_midi( void )
 	while (1) {
 		Uint16 message = SPI_MIDI_CMD;
 		TSK_disable();
-		spi_write(&message, 1);
-		spi_read(midi, 3);
+		while (1) {
+			spi_write(&message, 1);
+			spi_read(midi, 3);
+			// if the fist byte is 0, no new midi information
+			if ( (midi[0] & 0x80) == 0) { break; } // this is a hack for the slow avr isr
+
+			MidiPacket p;
+			p.midi_cmd = midi[0];
+			p.note_id  = midi[1];
+			p.velocity = midi[2];
+
+			midi_buffer_write(p);
+
+		}
 		TSK_enable();
-		TSK_sleep(5);
+		TSK_sleep(10);
 	}
 }
 
@@ -85,6 +99,6 @@ Void spi_get_interface_controls( void )
 		}
 
 		counter = (counter + 1) % 3;
-		TSK_sleep(25); // service every 5ms
+		TSK_sleep(75); // service every 5ms
 	}
 }

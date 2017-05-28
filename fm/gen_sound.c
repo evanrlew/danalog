@@ -7,21 +7,20 @@
 
 #include "gen_sound.h"
 
+/* Standard C includes */
 #include <std.h>
 #include <tsk.h>
 
-#include <stdio.h>
-
+/* DSP/BIOS headers */
 #include "hellocfg.h"
 
+/* ezDSP C5535 board specific headers */
 #include "ezdsp5535.h"
 
-
+/* Danalog headers */
 #include "../audio/singen.h"
 #include "../audio/sintable.h"
-
-#include "../drivers/i2s_dma.h"
-
+#include "../global_vars.h"
 
 
 Void generate_samples_tsk( Void )

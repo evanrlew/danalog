@@ -10,7 +10,7 @@
 
 #include "../global_vars.h"
 
-#define SPI_RW_WAIT 200
+#define SPI_RW_WAIT 500
 
 SPI_Config		spi_hwConfig;
 
