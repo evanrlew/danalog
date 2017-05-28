@@ -1,8 +1,7 @@
 #include "singen.h"
 
+/* Danalog headers */
 #include "sintable.h"
-#include "stdio.h"
-
 
 
 void sin_compute_params(SinState *state, Int32 frequency) {

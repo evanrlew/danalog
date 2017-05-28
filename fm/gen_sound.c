@@ -15,16 +15,13 @@
 #include "hellocfg.h"
 
 #include "ezdsp5535.h"
-#include "ezdsp5535_i2s.h"
-#include "ezdsp5535_i2c.h"
-#include "csl_i2s.h"
+
 
 #include "../audio/singen.h"
 #include "../audio/sintable.h"
 
 #include "../drivers/i2s_dma.h"
 
-extern CSL_I2sHandle   hI2s;
 
 
 Void generate_samples_tsk( Void )

@@ -8,8 +8,6 @@
 #ifndef GEN_SOUND_H_
 #define GEN_SOUND_H_
 
-#include <std.h>
-
 
 
 #endif /* GEN_SOUND_H_ */

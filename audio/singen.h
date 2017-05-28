@@ -9,7 +9,6 @@
 #define SINGEN_H_
 
 #include "ezdsp5535.h"
-#include "sintable.h"
 
 #define SAMPLE_RATE 48000
 

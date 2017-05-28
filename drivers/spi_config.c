@@ -8,9 +8,17 @@
 #include "spi_config.h"
 #include "csl_gpio.h"
 
+#include "../global_vars.h"
+
 #define SPI_RW_WAIT 200
 
 SPI_Config		spi_hwConfig;
+
+// SPI data containers
+Uint16 encoders[19];
+Uint16 pots[8];
+Uint16 switches;
+Uint16 midi[3];
 
 void spi_init( void ) {
 	/*********************************
