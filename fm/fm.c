@@ -45,7 +45,7 @@ Void generate_samples_tsk( Void )
 
 
 
-
+	SinState ss_carrier ,ss_mod;
 	while (1) {
 		SEM_pend(&ping_pong_sem, SYS_FOREVER);
 		MidiPacket p;
@@ -53,11 +53,13 @@ Void generate_samples_tsk( Void )
 			p = midi_buffer_read();
 		}
 
-		SinState ss_carrier ,ss_mod;
+
 		if (midi_packet_type(p) == MIDI_NOTE_ON) {
 			note = midi_to_fm_note(p);
-			sin_compute_params(&ss_carrier, note.pitch);
-			sin_compute_params(&ss_carrier, note.pitch * mod_ratio);
+			if (note.pitch != ss_carrier.frequency) {
+				sin_compute_params(&ss_carrier, note.pitch);
+				sin_compute_params(&ss_carrier, note.pitch * mod_ratio);
+			}
 
 		}
 		else {

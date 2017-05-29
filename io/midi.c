@@ -29,6 +29,10 @@ Uint16 midi_freq[88] = {
 };
 
 Uint16 convert_to_freq(Uint16 midi_note) {
-	return midi_freq[midi_note - 21];
+	if (midi_note < 21 || midi_note > 108) {
+		return 0;
+	} else {
+		return midi_freq[midi_note - 21];
+	}
 }
 

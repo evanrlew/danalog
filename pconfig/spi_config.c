@@ -44,7 +44,9 @@ void spi_init( void ) {
 	CSL_FINS(sysRegs->EBSR, SYS_EBSR_PPMODE, CSL_SYS_EBSR_PPMODE_MODE1);
 	// End of CSL copy paste
 
-	hSpi = SPI_open(SPI_CS_NUM_1, SPI_POLLING_MODE);
+	hSpi = &SPI_Instance;
+	hSpi->mode = SPI_CS_NUM_1;
+	hSpi->opMode = SPI_POLLING_MODE;
 
 	spi_hwConfig.spiClkDiv	= 25;
 	spi_hwConfig.wLen		= SPI_WORD_LENGTH_8;
