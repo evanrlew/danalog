@@ -10,7 +10,7 @@
 
 #include "../global_vars.h"
 
-#define SPI_RW_WAIT 500
+#define SPI_RW_WAIT 100
 
 SPI_Config		spi_hwConfig;
 
@@ -46,7 +46,7 @@ void spi_init( void ) {
 
 	hSpi = SPI_open(SPI_CS_NUM_1, SPI_POLLING_MODE);
 
-	spi_hwConfig.spiClkDiv	= 100;
+	spi_hwConfig.spiClkDiv	= 25;
 	spi_hwConfig.wLen		= SPI_WORD_LENGTH_8;
 	spi_hwConfig.frLen		= 1;
 	spi_hwConfig.wcEnable	= SPI_WORD_IRQ_DISABLE;

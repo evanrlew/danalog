@@ -9,7 +9,7 @@
 #define GLOBAL_VARS_H_
 
 #include "ezdsp5535.h"
-#include "fm/midi_queue.h"
+#include "io/midi_queue.h"
 
 // SPI recieving data structures
 extern Uint16 encoders[19];

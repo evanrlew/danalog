@@ -14,10 +14,10 @@
 
 
 /* Danalog headers */
-#include "drivers/aic3204.h"
-#include "drivers/i2s_dma.h"
-#include "drivers/spi_config.h"
-#include "fm/midi_queue.h"
+#include "pconfig/aic3204.h"
+#include "pconfig/i2s_dma.h"
+#include "pconfig/spi_config.h"
+#include "io/midi_queue.h"
 #include "global_vars.h"
 
 
