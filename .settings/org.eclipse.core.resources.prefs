@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//Debug/audio/subdir_rules.mk=UTF-8
 encoding//Debug/audio/subdir_vars.mk=UTF-8
+encoding//Debug/drivers/subdir_rules.mk=UTF-8
+encoding//Debug/drivers/subdir_vars.mk=UTF-8
 encoding//Debug/fm/subdir_rules.mk=UTF-8
 encoding//Debug/fm/subdir_vars.mk=UTF-8
 encoding//Debug/io/subdir_rules.mk=UTF-8
