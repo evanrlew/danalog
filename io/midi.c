@@ -19,7 +19,7 @@ MidiCommand midi_packet_type(MidiPacket p)
 	}
 }
 
-Uint16 midi_freq[88] = {
+Int16 midi_freq[88] = {
 		28,29,31,33,35,37,39,41,44,46,49,52,55,58,62,65,69,73,78,82,
 		87,93,98,104,110,117,124,131,139,147,156,165,175,185,196,208,
 		220,233,247,262,277,294,311,330,349,370,392,415,440,466,494,523,
@@ -28,7 +28,7 @@ Uint16 midi_freq[88] = {
 		2794,2960,3136,3322,3520,3729,3951,4186
 };
 
-Uint16 convert_to_freq(Uint16 midi_note) {
+Int16 convert_to_freq(Uint16 midi_note) { // NOTE the signed types
 	if (midi_note < 21 || midi_note > 108) {
 		return 0;
 	} else {

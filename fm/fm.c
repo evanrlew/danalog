@@ -24,11 +24,12 @@
 #include "../io/midi.h"
 
 FMNote note;
+SinState ss_carrier, ss_mod;
 
 FMNote midi_to_fm_note(MidiPacket* p) {
 	FMNote n;
 	n.pitch = convert_to_freq(p->note_id);
-	n.velocity = p->velocity;
+	n.velocity = (Int16) p->velocity;
 	n.mod_env_state = ENV_ATTACK;
 	n.mod_env_counter = 0;
 	n.car_env_state = ENV_ATTACK;
@@ -41,11 +42,11 @@ Void generate_samples_tsk( Void )
 {
 
 	Int16 mod_ratio = 1;
-	Int16 mod_depth = 1;
+	Int16 mod_depth = 5;
 
 
 
-	SinState ss_carrier ,ss_mod;
+
 	while (1) {
 		SEM_pend(&ping_pong_sem, SYS_FOREVER);
 		MidiPacket p;
@@ -58,7 +59,7 @@ Void generate_samples_tsk( Void )
 			note = midi_to_fm_note(&p);
 			if (note.pitch != ss_carrier.frequency) {
 				sin_compute_params(&ss_carrier, note.pitch);
-				sin_compute_params(&ss_carrier, note.pitch * mod_ratio);
+				sin_compute_params(&ss_mod,  note.pitch * mod_ratio);
 			}
 
 		}

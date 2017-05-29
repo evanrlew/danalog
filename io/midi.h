@@ -29,7 +29,7 @@ typedef struct midi_packet_struct MidiPacket;
 MidiCommand midi_packet_type(MidiPacket);
 
 
-Uint16 convert_to_freq(Uint16 midi_note);
+Int16 convert_to_freq(Uint16 midi_note);
 
 
 #endif /* MIDI_UTILS_H_ */

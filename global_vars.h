@@ -10,6 +10,8 @@
 
 #include "ezdsp5535.h"
 #include "io/midi_queue.h"
+#include "fm/fm.h"
+#include "audio/singen.h"
 
 // SPI recieving data structures
 extern Uint16 encoders[19];
@@ -27,6 +29,10 @@ extern Int16 right_pong[I2S_DMA_BUFFER_SIZE];
 
 // Midi buffer
 extern MidiPacket midi_buffer[];
+
+extern FMNote note;
+extern SinState ss_carrier;
+extern SinState ss_mod;
 
 
 

@@ -18,12 +18,12 @@ typedef enum {
 
 
 typedef struct {
-	Uint16 pitch;
-	Uint16 velocity;
+	Int16 pitch;
+	Int16 velocity;
 	EnvelopeState mod_env_state;
 	EnvelopeState car_env_state;
-	Uint16 mod_env_counter;
-	Uint16 car_env_counter;
+	Int16 mod_env_counter;
+	Int16 car_env_counter;
 
 } FMNote;
 
