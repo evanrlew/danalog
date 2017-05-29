@@ -19,16 +19,25 @@
 #include "../io/midi_queue.h"
 #include "../global_vars.h"
 
+volatile Int16 nothing = 0;
+
 Void spi_get_midi( void )
 {
 	while (1) {
 		Uint16 message = SPI_MIDI_CMD;
 		TSK_disable();
+
 		while (1) {
 			spi_write(&message, 1);
 			spi_read(midi, 3);
 			// if the fist byte is 0, no new midi information
-			if ( (midi[0] & 0x80) == 0) { break; } // this is a hack for the slow avr isr
+			if ( midi[0] == 0x00) {
+				break;
+			}
+			else if (midi[0] != 0x90 && midi[0] != 0x80) {
+				while(1);
+			}
+			//if ( (midi[0] & 0x80) == 0) { break; } // this is a hack for the slow avr isr
 
 			MidiPacket p;
 			p.midi_cmd = midi[0];

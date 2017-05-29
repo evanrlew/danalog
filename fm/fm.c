@@ -25,10 +25,10 @@
 
 FMNote note;
 
-FMNote midi_to_fm_note(MidiPacket p) {
+FMNote midi_to_fm_note(MidiPacket* p) {
 	FMNote n;
-	n.pitch = convert_to_freq(p.note_id);
-	n.velocity = p.velocity;
+	n.pitch = convert_to_freq(p->note_id);
+	n.velocity = p->velocity;
 	n.mod_env_state = ENV_ATTACK;
 	n.mod_env_counter = 0;
 	n.car_env_state = ENV_ATTACK;
@@ -41,7 +41,7 @@ Void generate_samples_tsk( Void )
 {
 
 	Int16 mod_ratio = 1;
-	Int16 mod_depth = 0;
+	Int16 mod_depth = 1;
 
 
 
@@ -55,7 +55,7 @@ Void generate_samples_tsk( Void )
 
 
 		if (midi_packet_type(p) == MIDI_NOTE_ON) {
-			note = midi_to_fm_note(p);
+			note = midi_to_fm_note(&p);
 			if (note.pitch != ss_carrier.frequency) {
 				sin_compute_params(&ss_carrier, note.pitch);
 				sin_compute_params(&ss_carrier, note.pitch * mod_ratio);
@@ -80,7 +80,7 @@ Void generate_samples_tsk( Void )
 #pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
 			Int16 mod = sin_gen(&ss_mod, 0);
-			//mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
+			//Int16 mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
 			Int16 mod_scaled = (mod >> 3) * mod_depth;
 
 			Int16 output = sin_gen(&ss_carrier, mod_scaled);// >> 6;

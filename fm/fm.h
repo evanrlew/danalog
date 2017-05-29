@@ -27,6 +27,6 @@ typedef struct {
 
 } FMNote;
 
-FMNote midi_to_fm_note(MidiPacket p);
+FMNote midi_to_fm_note(MidiPacket* p);
 
 #endif /* GEN_SOUND_H_ */
