@@ -31,9 +31,9 @@ FMNote midi_to_fm_note(MidiPacket* p) {
 	n.pitch = convert_to_freq(p->note_id);
 	n.velocity = (Int16) p->velocity;
 	n.mod_env_state = ENV_ATTACK;
-	n.mod_env_counter = 0;
+	n.mod_env = 1;
 	n.car_env_state = ENV_ATTACK;
-	n.car_env_counter = 0;
+	n.car_env = 1;
 	return n;
 }
 
@@ -42,7 +42,7 @@ Void generate_samples_tsk( Void )
 {
 
 	Int16 mod_ratio = 1;
-	Int16 mod_depth = 5;
+	Int16 mod_depth = 1;
 
 
 
@@ -64,7 +64,10 @@ Void generate_samples_tsk( Void )
 
 		}
 		else {
-			// start decay phase
+			note.car_env_state = ENV_RELEASE;
+			note.mod_env_state = ENV_RELEASE;
+			note.car_env = 0;
+			note.mod_env = 0;
 		}
 
 		// determine which buffer to fill
@@ -80,11 +83,11 @@ Void generate_samples_tsk( Void )
 		Int16 i;
 #pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-			Int16 mod = sin_gen(&ss_mod, 0);
+			Int16 mod = note.mod_env * sin_gen(&ss_mod, 0);
 			//Int16 mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
 			Int16 mod_scaled = (mod >> 3) * mod_depth;
 
-			Int16 output = sin_gen(&ss_carrier, mod_scaled);// >> 6;
+			Int16 output = note.car_env * sin_gen(&ss_carrier, mod_scaled);// >> 6;
 			left_output[i] = output;
 			right_output[i] = output;
 		} // end for
