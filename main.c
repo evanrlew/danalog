@@ -18,8 +18,6 @@
 #include "pconfig/spi_config.h"
 #include "io/midi_queue.h"
 
-
-
 Void main()
 {
 	printf("Initializing bsl\n");

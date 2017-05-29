@@ -5,7 +5,7 @@
  *      Author: evan
  */
 
-#include "gen_sound.h"
+#include "fm.h"
 
 /* Standard C includes */
 #include <std.h>
