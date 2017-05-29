@@ -21,23 +21,48 @@
 #include "../audio/singen.h"
 #include "../audio/sintable.h"
 #include "../global_vars.h"
+#include "../io/midi.h"
+
+FMNote note;
+
+FMNote midi_to_fm_note(MidiPacket p) {
+	FMNote n;
+	n.pitch = convert_to_freq(p.note_id);
+	n.velocity = p.velocity;
+	n.mod_env_state = ENV_ATTACK;
+	n.mod_env_counter = 0;
+	n.car_env_state = ENV_ATTACK;
+	n.car_env_counter = 0;
+	return n;
+}
 
 
 Void generate_samples_tsk( Void )
 {
-	Int16 freq = 100;
+
 	Int16 mod_ratio = 1;
-	Int16 mod_depth = 5;
+	Int16 mod_depth = 0;
 
-	SinState ss_carrier;
-	sin_compute_params(&ss_carrier, freq);
 
-	SinState ss_mod;
-	sin_compute_params(&ss_mod, freq * mod_ratio);
 
 
 	while (1) {
 		SEM_pend(&ping_pong_sem, SYS_FOREVER);
+		MidiPacket p;
+		while (midi_buffer_size() > 0) {
+			p = midi_buffer_read();
+		}
+
+		SinState ss_carrier ,ss_mod;
+		if (midi_packet_type(p) == MIDI_NOTE_ON) {
+			note = midi_to_fm_note(p);
+			sin_compute_params(&ss_carrier, note.pitch);
+			sin_compute_params(&ss_carrier, note.pitch * mod_ratio);
+
+		}
+		else {
+			// start decay phase
+		}
 
 		// determine which buffer to fill
 		Int16 *left_output, *right_output;
