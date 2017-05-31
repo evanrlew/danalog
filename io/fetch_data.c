@@ -25,7 +25,7 @@ Void spi_get_midi( void )
 {
 	while (1) {
 		Uint16 message = SPI_MIDI_CMD;
-		TSK_disable();
+		//TSK_disable();
 
 		while (1) {
 			spi_write(&message, 1);
@@ -47,7 +47,7 @@ Void spi_get_midi( void )
 			midi_buffer_write(p);
 
 		}
-		TSK_enable();
+		//TSK_enable();
 		TSK_sleep(10);
 	}
 }

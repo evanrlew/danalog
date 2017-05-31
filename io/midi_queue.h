@@ -13,6 +13,7 @@
 
 #define MIDI_BUFFER_SIZE 16
 
+extern Uint16 writeLoc, readLoc;
 
 void midi_buffer_init();
 void midi_buffer_write( MidiPacket p );

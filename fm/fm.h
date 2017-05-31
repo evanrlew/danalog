@@ -11,22 +11,21 @@
 #include <std.h>
 
 #include "../io/midi.h"
-
-typedef enum {
-	ENV_ATTACK, ENV_DECAY, ENV_SUSTAIN, ENV_RELEASE
-} EnvelopeState;
+#include "envelope.h"
 
 
 typedef struct {
 	Int16 pitch;
 	Int16 velocity;
-	EnvelopeState mod_env_state;
-	EnvelopeState car_env_state;
-	Int16 mod_env;
-	Int16 car_env;
+	Envelope mod_env;
+	Envelope car_env;
 
 } FMNote;
 
 FMNote midi_to_fm_note(MidiPacket* p);
+
+
+
+
 
 #endif /* GEN_SOUND_H_ */
