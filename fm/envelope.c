@@ -49,7 +49,7 @@ Int16 envelopeIncrement(Envelope *e) {
 			}
 		} else {
 			e->env_state = ENV_SUSTAIN;
-			e->env_val = 0;
+			e->env_val = e->env_config->sustain;
 		}
 	} else if (e->env_state == ENV_RELEASE) {
 		if (e->env_val > 0) {
