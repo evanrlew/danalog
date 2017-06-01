@@ -96,11 +96,12 @@ Void generate_samples_tsk( Void )
 			Int16 counter;
 			for (counter = 0; counter < NOTE_BUF_LEN; counter++) {
 				FMNote *n = &note_buf[counter];
+				if (n->car_env.env_state != ENV_INACTIVE) {
+					Int32 mod = ((envelopeIncrement(&n->mod_env) * (Int32) sin_gen(&n->mod_sin, 0))) >> 8;
+					Int32 mod_scaled = (mod >> 3) * mod_depth;
 
-				Int32 mod = (envelopeIncrement(&n->mod_env) * (Int32) sin_gen(&n->mod_sin, 0)) / 256;
-				Int32 mod_scaled = (mod >> 3) * mod_depth;
-
-				output += (envelopeIncrement(&n->car_env) * (Int32) sin_gen(&n->car_sin, mod_scaled)) / 1024;
+					output += ((envelopeIncrement(&n->car_env) * (Int32) sin_gen(&n->car_sin, mod_scaled))) >> 10;
+				}
 			}
 
 			left_output[i] = output;

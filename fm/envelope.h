@@ -11,7 +11,7 @@
 #include <std.h>
 
 typedef enum {
-	ENV_ATTACK, ENV_DECAY, ENV_SUSTAIN, ENV_RELEASE
+	ENV_ATTACK, ENV_DECAY, ENV_SUSTAIN, ENV_RELEASE, ENV_INACTIVE
 } EnvelopeState;
 
 

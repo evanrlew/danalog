@@ -60,7 +60,8 @@ Int16 envelopeIncrement(Envelope *e) {
 				e->env_val--;
 			}
 		} else {
-			return 0;
+			e->env_state = ENV_INACTIVE;
+			e->env_val = 0;
 		}
 	}
 	return e->env_val;
