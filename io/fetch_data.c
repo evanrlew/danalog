@@ -35,7 +35,7 @@ Void spi_get_midi( void )
 				break;
 			}
 			else if (midi[0] != 0x90 && midi[0] != 0x80) {
-				while(1);
+				break;
 			}
 			//if ( (midi[0] & 0x80) == 0) { break; } // this is a hack for the slow avr isr
 
@@ -48,42 +48,42 @@ Void spi_get_midi( void )
 
 		}
 		//TSK_enable();
-		TSK_sleep(10);
+		TSK_sleep(2);
 	}
 }
 
 Void spi_get_interface_controls( void )
 {
-//	Uint16 counter = 0;
-//	Uint16 message;
-//	while (1) {
-//		switch(counter) {
-//		case 0:
-//			message = SPI_SWT_CMD;
-//			TSK_disable();
-//			spi_write(&message, 1);
-//			spi_read(&switches, 1);
-//			TSK_enable();
-//			break;
-//		case 1:
-//			message = SPI_ENC_CMD;
-//			TSK_disable();
-//			spi_write(&message, 1);
-//			spi_read(encoders, 19);
-//			TSK_enable();
-//			break;
-//		case 2:
-//			message = SPI_POT_CMD;
-//			TSK_disable();
-//			spi_write(&message, 1);
-//			spi_read(pots, 8);
-//			TSK_enable();
-//			break;
-//		default:
-//			while (1); // error
-//		}
-//
-//		counter = (counter + 1) % 3;
-//		TSK_sleep(75); // service every 5ms
-//	}
+	Uint16 counter = 0;
+	Uint16 message;
+	while (1) {
+		switch(counter) {
+		case 0:
+			message = SPI_SWT_CMD;
+			TSK_disable();
+			spi_write(&message, 1);
+			spi_read(&switches, 1);
+			TSK_enable();
+			break;
+		case 1:
+			message = SPI_ENC_CMD;
+			TSK_disable();
+			spi_write(&message, 1);
+			spi_read(encoders, 19);
+			TSK_enable();
+			break;
+		case 2:
+			message = SPI_POT_CMD;
+			TSK_disable();
+			spi_write(&message, 1);
+			spi_read(pots, 8);
+			TSK_enable();
+			break;
+		default:
+			while (1); // error
+		}
+
+		counter = (counter + 1) % 3;
+		TSK_sleep(1000);
+	}
 }

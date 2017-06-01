@@ -49,11 +49,13 @@ Void generate_samples_tsk( Void )
 	Int16 mod_ratio = 1;
 	Int16 mod_depth = 1;
 
-	createEnvelopeConfig(&car_env_cfg, 20, 20, 250, 100);
-	createEnvelopeConfig(&mod_env_cfg, 200, 100, 100, 100);
+	createEnvelopeConfig(&car_env_cfg, 0, 0, 250, 100);
+	createEnvelopeConfig(&mod_env_cfg, 0, 0, 100, 100);
 
 	while (1) {
 		SEM_pend(&ping_pong_sem, SYS_FOREVER);
+		//createEnvelopeConfig(&car_env_cfg, encoders[10], encoders[11], encoders[12], encoders[13]);
+		//createEnvelopeConfig(&mod_env_cfg, encoders[14], encoders[15], encoders[16], encoders[17]);
 
 		MidiPacket p;
 		if (midi_buffer_size() > 0) {

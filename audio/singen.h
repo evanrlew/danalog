@@ -10,7 +10,7 @@
 
 #include "ezdsp5535.h"
 
-#define SAMPLE_RATE 48000
+#define SAMPLE_RATE 96000
 
 struct sin_state {
 	Int32 position;
