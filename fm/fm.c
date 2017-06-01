@@ -24,21 +24,25 @@
 #include "../global_vars.h"
 #include "../io/midi.h"
 #include "envelope.h"
-
-SinState ss_carrier, ss_mod;
+#include "ringbuf.h"
 
 EnvelopeConfig mod_env_cfg, car_env_cfg;
 
 FMNote note;
 
 
+Int16 mod_ratio = 1;
+Int16 mod_depth = 1;
+
 
 FMNote midi_to_fm_note(MidiPacket* p) {
 	FMNote n;
 	n.pitch = convert_to_freq(p->note_id);
 	n.velocity = (Int16) p->velocity;
-	n.car_env = createEnvelope(&car_env_cfg);
 	n.mod_env = createEnvelope(&mod_env_cfg);
+	n.car_env = createEnvelope(&car_env_cfg);
+	sin_compute_params(&n.mod_sin, n.pitch * mod_ratio);
+	sin_compute_params(&n.car_sin, n.pitch);
 	return n;
 }
 
@@ -46,8 +50,7 @@ FMNote midi_to_fm_note(MidiPacket* p) {
 Void generate_samples_tsk( Void )
 {
 
-	Int16 mod_ratio = 1;
-	Int16 mod_depth = 1;
+
 
 	createEnvelopeConfig(&car_env_cfg, 0, 0, 250, 100);
 	createEnvelopeConfig(&mod_env_cfg, 0, 0, 100, 100);
@@ -61,17 +64,16 @@ Void generate_samples_tsk( Void )
 		if (midi_buffer_size() > 0) {
 			while (midi_buffer_size() > 0) {
 				p = midi_buffer_read();
+
+				if (midi_packet_type(p) == MIDI_NOTE_ON) {
+					add_note(&p, mod_ratio);
+				}
+				else if (midi_packet_type(p) == MIDI_NOTE_OFF) { // MIDI_NOTE_OFF
+					release_note(&p);
+				}
 			}
 
-			if (midi_packet_type(p) == MIDI_NOTE_ON) {
-				note = midi_to_fm_note(&p);
-				sin_compute_params(&ss_carrier, note.pitch);
-				sin_compute_params(&ss_mod,  note.pitch * mod_ratio);
-			}
-			else if (midi_packet_type(p) == MIDI_NOTE_OFF) { // MIDI_NOTE_OFF
-				note.car_env.env_state = ENV_RELEASE;
-				note.mod_env.env_state = ENV_RELEASE;
-			}
+
 		}
 
 
@@ -90,11 +92,17 @@ Void generate_samples_tsk( Void )
 		Int16 i;
 #pragma MUST_ITERATE(I2S_DMA_BUFFER_SIZE,I2S_DMA_BUFFER_SIZE)
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-			Int32 mod = (envelopeIncrement(&note.mod_env) * (Int32) sin_gen(&ss_mod, 0)) / 256;
-			//Int16 mod_scaled = (mod_depth * mod * SINTABLE_LENGTH * 4) / ( 205887 );
-			Int32 mod_scaled = (mod >> 3) * mod_depth;
+			Int16 output = 0;
+			Int16 counter;
+			for (counter = 0; counter < NOTE_BUF_LEN; counter++) {
+				FMNote *n = &note_buf[counter];
 
-			Int16 output = (envelopeIncrement(&note.car_env) * (Int32) sin_gen(&ss_carrier, mod_scaled)) / 256;// >> 6;
+				Int32 mod = (envelopeIncrement(&n->mod_env) * (Int32) sin_gen(&n->mod_sin, 0)) / 256;
+				Int32 mod_scaled = (mod >> 3) * mod_depth;
+
+				output += (envelopeIncrement(&n->car_env) * (Int32) sin_gen(&n->car_sin, mod_scaled)) / 1024;
+			}
+
 			left_output[i] = output;
 			right_output[i] = output;
 		} // end for

@@ -12,6 +12,7 @@
 
 #include "../io/midi.h"
 #include "envelope.h"
+#include "../audio/singen.h"
 
 
 typedef struct {
@@ -19,6 +20,9 @@ typedef struct {
 	Int16 velocity;
 	Envelope mod_env;
 	Envelope car_env;
+	SinState mod_sin;
+	SinState car_sin;
+
 
 } FMNote;
 
