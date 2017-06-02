@@ -32,7 +32,7 @@ FMNote note;
 
 
 Int16 mod_ratio = 1;
-Int16 mod_depth = 1;
+Int16 mod_depth = 5;
 
 
 FMNote midi_to_fm_note(MidiPacket* p) {
@@ -53,7 +53,7 @@ Void generate_samples_tsk( Void )
 
 
 	createEnvelopeConfig(&car_env_cfg, 0, 0, 250, 100);
-	createEnvelopeConfig(&mod_env_cfg, 0, 0, 100, 100);
+	createEnvelopeConfig(&mod_env_cfg, 1, 10, 100, 100);
 
 	while (1) {
 		SEM_pend(&ping_pong_sem, SYS_FOREVER);
@@ -94,6 +94,7 @@ Void generate_samples_tsk( Void )
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
 			Int16 output = 0;
 			Int16 counter;
+#pragma MUST_ITERATE(NOTE_BUF_LEN,NOTE_BUF_LEN)
 			for (counter = 0; counter < NOTE_BUF_LEN; counter++) {
 				FMNote *n = &note_buf[counter];
 				if (n->car_env.env_state != ENV_INACTIVE) {

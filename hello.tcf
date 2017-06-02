@@ -123,6 +123,9 @@ bios.HWI.instance("HWI_INT8").fxn = prog.extern("dma_isr");
 bios.HWI.instance("HWI_INT8").useDispatcher = 1;
 bios.CLK.MICROSECONDS = 100.0000;
 bios.CLK.MICROSECONDS = 200.0000;
+bios.GBL.ENABLEINST = 0;
+bios.GBL.INSTRUMENTED = 0;
+bios.GBL.ENABLEALLTRC = 0;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {

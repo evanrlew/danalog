@@ -54,36 +54,36 @@ Void spi_get_midi( void )
 
 Void spi_get_interface_controls( void )
 {
-	Uint16 counter = 0;
-	Uint16 message;
-	while (1) {
-		switch(counter) {
-		case 0:
-			message = SPI_SWT_CMD;
-			TSK_disable();
-			spi_write(&message, 1);
-			spi_read(&switches, 1);
-			TSK_enable();
-			break;
-		case 1:
-			message = SPI_ENC_CMD;
-			TSK_disable();
-			spi_write(&message, 1);
-			spi_read(encoders, 19);
-			TSK_enable();
-			break;
-		case 2:
-			message = SPI_POT_CMD;
-			TSK_disable();
-			spi_write(&message, 1);
-			spi_read(pots, 8);
-			TSK_enable();
-			break;
-		default:
-			while (1); // error
-		}
-
-		counter = (counter + 1) % 3;
-		TSK_sleep(1000);
-	}
+//	Uint16 counter = 0;
+//	Uint16 message;
+//	while (1) {
+//		switch(counter) {
+//		case 0:
+//			message = SPI_SWT_CMD;
+//			TSK_disable();
+//			spi_write(&message, 1);
+//			spi_read(&switches, 1);
+//			TSK_enable();
+//			break;
+//		case 1:
+//			message = SPI_ENC_CMD;
+//			TSK_disable();
+//			spi_write(&message, 1);
+//			spi_read(encoders, 19);
+//			TSK_enable();
+//			break;
+//		case 2:
+//			message = SPI_POT_CMD;
+//			TSK_disable();
+//			spi_write(&message, 1);
+//			spi_read(pots, 8);
+//			TSK_enable();
+//			break;
+//		default:
+//			while (1); // error
+//		}
+//
+//		counter = (counter + 1) % 3;
+//		TSK_sleep(1000);
+//	}
 }
