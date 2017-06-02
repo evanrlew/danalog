@@ -123,6 +123,11 @@ bios.HWI.instance("HWI_INT8").fxn = prog.extern("dma_isr");
 bios.HWI.instance("HWI_INT8").useDispatcher = 1;
 bios.CLK.MICROSECONDS = 100.0000;
 bios.CLK.MICROSECONDS = 200.0000;
+bios.TSK.create("eq");
+bios.TSK.instance("eq").order = 5;
+bios.TSK.instance("eq").comment = "_eq_tsk";
+bios.TSK.instance("eq").comment = "";
+bios.TSK.instance("eq").fxn = prog.extern("eq_tsk");
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {
