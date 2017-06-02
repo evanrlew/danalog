@@ -63,7 +63,6 @@ Void main()
 	if(CSL_SOK != status)
 	{
 	   printf("PLL init failed \n");
-	   return (status);
 	}
 
 	hPll = (PLL_Handle)(&pllObj);
@@ -74,17 +73,14 @@ Void main()
 	if(CSL_SOK != status)
 	{
 	   printf("PLL bypass failed:%d\n",CSL_ESYS_BADHANDLE);
-	   return(status);
 	}
 
-	/* Configure the PLL for 60MHz */
 	pConfigInfo = &pllCfg_120MHz;
 
 	status = PLL_config (hPll, pConfigInfo);
 	if(CSL_SOK != status)
 	{
 	   printf("PLL config failed\n");
-	   return(status);
 	}
 
 	status = PLL_getConfig(hPll, &pllCfg1);
@@ -92,7 +88,6 @@ Void main()
 	{
 		printf("TEST FAILED: PLL get config... Failed.\n");
 		printf ("Reason: PLL_getConfig failed. [status = 0x%x].\n", status);
-		return(status);
 	}
 
 	printf("REGISTER --- CONFIG VALUES\n");
@@ -109,7 +104,6 @@ Void main()
 	if(CSL_SOK != status)
 	{
 	   printf("PLL enable failed:%d\n",CSL_ESYS_BADHANDLE);
-	   return(status);
 	}
 
 	printf("Init i2c\n");
