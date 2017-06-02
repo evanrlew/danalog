@@ -106,6 +106,9 @@ Void main()
 	   printf("PLL enable failed:%d\n",CSL_ESYS_BADHANDLE);
 	}
 
+
+
+
 	printf("Init i2c\n");
 	EZDSP5535_I2C_init( );
 

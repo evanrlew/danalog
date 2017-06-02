@@ -48,7 +48,7 @@ Void spi_get_midi( void )
 
 		}
 		//TSK_enable();
-		TSK_sleep(2);
+		TSK_sleep(10);
 	}
 }
 
