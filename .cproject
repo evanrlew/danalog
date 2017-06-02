@@ -42,12 +42,10 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.DISPLAY_ERROR_NUMBER.69951699" name="Emit diagnostic identifier numbers (--display_error_number, -pden)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.DISPLAY_ERROR_NUMBER" value="true" valueType="boolean"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.INCLUDE_PATH.181401781" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\ti\dsplib_2.40.00\55x_src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\ti\dsplib_2.40.00&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\ti\dsplib_2.40.00\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\ezdsp5535_BSL_RevC\ezdsp5535_v1\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\ezdsp5535_BSL_RevC\ezdsp5535_v1\c55xx_csl\inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${TCONF_OUTPUT_DIR}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\c55_lp\c55_dsplib_03.00.00.03\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${BIOS_INCLUDE_DIR}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${RTDX_INCLUDE_DIR}&quot;"/>
 								</option>
@@ -86,7 +84,7 @@
 									<listOptionValue builtIn="false" value="&quot;libc.a&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;cslVC5505.lib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;ezdsp5535bsl.lib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;C:\ti\dsplib_2.40.00\55xdspx.lib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\c55_lp\c55_dsplib_03.00.00.03\lib\55xdspx_r3.lib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;rts55x.lib&quot;"/>
 								</option>
 								<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.exeLinker.inputType__CMD_SRCS.1571032275" name="Linker Command Files" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.exeLinker.inputType__CMD_SRCS"/>
