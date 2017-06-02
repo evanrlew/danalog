@@ -42,6 +42,7 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.DISPLAY_ERROR_NUMBER.69951699" name="Emit diagnostic identifier numbers (--display_error_number, -pden)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.DISPLAY_ERROR_NUMBER" value="true" valueType="boolean"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.INCLUDE_PATH.181401781" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\ti\dsplib_2.40.00\55x_src&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\dsplib_2.40.00&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\dsplib_2.40.00\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;C:\ti\ezdsp5535_BSL_RevC\ezdsp5535_v1\include&quot;"/>
@@ -56,8 +57,10 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.QUIET_LEVEL.1876639623" name="Quiet Level" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.QUIET_LEVEL" value="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.QUIET_LEVEL.VERBOSE" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASSUME_BSS_ONCHIP.375262412" name="Assume all BSS is on-chip (--assume_bss_onchip, -mb)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASSUME_BSS_ONCHIP" value="true" valueType="boolean"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.SYMDEBUG__KEEP_ALL_TYPES.1136811157" name="Keep unreferenced type info (default for elf w/ debug) (--symdebug:keep_all_types)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.SYMDEBUG__KEEP_ALL_TYPES" value="false" valueType="boolean"/>
-								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.OPT_FOR_SPEED.1160853790" name="Optimize for speed (--opt_for_speed, -mf)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.OPT_FOR_SPEED" value="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.OPT_FOR_SPEED.5" valueType="enumerated"/>
-								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.AUTO_INLINE.1184215974" name="Specify threshold for automatic inlining (--auto_inline, -oi)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.AUTO_INLINE" value="50" valueType="string"/>
+								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.OPT_FOR_SPEED.1160853790" name="Optimize for speed (--opt_for_speed, -mf)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.OPT_FOR_SPEED" value="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.OPT_FOR_SPEED._none" valueType="enumerated"/>
+								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.AUTO_INLINE.1184215974" name="Specify threshold for automatic inlining (--auto_inline, -oi)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.AUTO_INLINE" value="" valueType="string"/>
+								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ALGEBRAIC.1086718154" name="Codegen outputs algebraic assembly (--algebraic, -mg)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ALGEBRAIC" value="false" valueType="boolean"/>
+								<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASM_SOURCE.1017864867" name="Select assembly source language (--asm_source)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASM_SOURCE" value="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASM_SOURCE.mnemonic" valueType="enumerated"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__C_SRCS.70805400" multipleOfType="true" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__C_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__CPP_SRCS.920333547" multipleOfType="true" name="C++ Sources" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__CPP_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__ASM_SRCS.1109802059" multipleOfType="true" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__ASM_SRCS"/>
@@ -98,6 +101,16 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.ti.ccstudio.buildDefinitions.C5500.Debug.1226431484.1462236233" name="cifft_scale.asm" rcbsApplicability="disable" resourcePath="cifft_scale.asm" toolsToInvoke="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.compilerDebug.405337852.1175784779">
+						<tool id="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.compilerDebug.405337852.1175784779" name="C5500 Compiler" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.exe.compilerDebug.405337852">
+							<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASM_SOURCE.927876372" name="Select assembly source language (--asm_source)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASM_SOURCE" value="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.ASM_SOURCE.mnemonic" valueType="enumerated"/>
+							<option id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.PROGRAM_LEVEL_COMPILE.74859700" name="Program mode compilation (--program_level_compile, -pm)" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compilerID.PROGRAM_LEVEL_COMPILE" value="false" valueType="boolean"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__C_SRCS.1548217384" multipleOfType="true" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__C_SRCS"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__CPP_SRCS.399075487" multipleOfType="true" name="C++ Sources" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__CPP_SRCS"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__ASM_SRCS.553620653" multipleOfType="true" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__ASM_SRCS"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__ASM2_SRCS.321612898" multipleOfType="true" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.C5500_4.4.compiler.inputType__ASM2_SRCS"/>
+						</tool>
+					</fileInfo>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

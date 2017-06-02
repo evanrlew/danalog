@@ -12,13 +12,15 @@
 #include <math.h>
 #include <tsk.h>
 #include "Dsplib.h"
+#include "Dsplib_c.h"
+#include "MISC.H"
 #include "audio/singen.h"
 #include "global_vars.h"
 #include "TMS320.H"
 
 #pragma DATA_SECTION(Buffer, "Buffer");
 Int16 Buffer[256];
-//#pragma DATA_SECTION(complex_data,"complex_data");
+#pragma DATA_ALIGN (complex_data, 4)
 DATA complex_data[512];
 
 
@@ -75,7 +77,7 @@ Void eq_tsk( Void ) {
 		for(i=0;i<512;i++) {
 			printf("%d, ", complex_data[i]);
 		}
-		cifft_SCALE(complex_data, 256)
+		cifft_SCALE(complex_data, 256);
 		//cfft_SCALE(complex_data, 256);
 		//cbrev(complex_data, complex_data, 256);
 		TSK_sleep(100);
