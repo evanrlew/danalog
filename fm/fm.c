@@ -32,7 +32,7 @@ FMNote note;
 
 
 Int16 mod_ratio = 1;
-Int16 mod_depth = 5;
+Int16 mod_depth = 3;
 
 
 FMNote midi_to_fm_note(MidiPacket* p) {
