@@ -22,11 +22,13 @@
 Int16 Buffer[256];
 //#pragma DATA_ALIGN (complex_data, 4)
 
-LDATA x[128];
-LDATA Bk[3] = {10, 14, 10};
-LDATA Ak = 34;
-LDATA y[128];
-
+Int32 x[128];
+Int32 Bk[3] = {10, 14, 10};
+Int32 Ak = 34;
+Int32 y[128];
+Int32 First_Term = 0;
+Int32 Second_Term = 0;
+Int32 Third_Term = 0;
 //Int16 nx = 128;
 //Int16 nh = 3;
 //DATA x[128];
@@ -50,32 +52,40 @@ Void eq_tsk( Void ) {
 	volatile Int16 counter = 0;
 	SinState EQSine;
 	sin_compute_params(&EQSine, 6000);
-	Int8 i;
-//	h[0] = 6;
-//	for(i = 1; i< delay; i++) {
-//		h[i] = 0;
-//	}
-//	h[nh-1] = 1;
-//	for (var = 0; var < nh; ++var) {
-//		dbuffer[i] = 0;
-//	}
+	Int16 i;
 	while(1) {
 		// eq code
 		printf("\nSine Wave ");
 		for (i = 0; i < 128; ++i) {
 			x[i] = sin_gen(&EQSine, 0);
-
-			printf("%i,", x[i]);
+			x[i] = x[i]/2048;
+		//	printf("%d,", x[i]);
 		}
 
 		printf("\nFilter ");
-		//oflag = iirlat(x,h,r,dbuffer,nx,nh);
-		//oflag = fir2(x,h,r,dbuffer,nx,nh);
-		//printf("\n%i\n", oflag);
+		First_Term = Bk[0]*x[0];
+		Second_Term = 0;
+		Third_Term = 0;
+		y[0] = First_Term/Ak;
+		First_Term = Bk[0]*x[1];
+		Second_Term = Bk[1]*x[0];
+		Third_Term = 0;
+		y[1] = First_Term + Second_Term;
+		y[1] = y[1]/Ak;
+		First_Term = Bk[0]*x[2];
+		Second_Term = Bk[1]*x[1];
+		Third_Term = Bk[2]*x[0];
+		y[2] = First_Term + Second_Term + Third_Term;
+		y[2] = y[2]/Ak;
 
-		for (var = 0; var < 128; ++var) {
-			y[i] = (Bk[0]*x[i] + Bk[1]*x[i-1] + Bk[2]*x[i-2])/Ak;
-			printf("%i,", y[i]);
+		for (var = 3; var < 128; ++var) {
+			First_Term = Bk[0]*x[var];
+			Second_Term = Bk[1]*x[var-1];
+			Third_Term = Bk[2]*x[var-2];
+			y[var] = First_Term + Second_Term + Third_Term;
+			y[var] = y[var]/Ak;
+//			y[i] = (Bk[0]*x[i] + Bk[1]*x[i-1] + Bk[2]*x[i-2])/Ak;
+			//printf("%d,", y[i]);
 		}
 
 ////		Uint8 Knob_Values[5] = {pots[0], pots[1], pots[2], pots[3], pots[4]};
