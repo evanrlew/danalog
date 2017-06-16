@@ -21,18 +21,18 @@ extern Uint16 midi[3];
 
 // I2S/DMA buffers for audio output
 #define I2S_DMA_BUFFER_SIZE 128
-extern Int16 left_ping[I2S_DMA_BUFFER_SIZE];
-extern Int16 left_pong[I2S_DMA_BUFFER_SIZE];
+extern Int16 ag_left_ping[I2S_DMA_BUFFER_SIZE];
+extern Int16 ag_left_pong[I2S_DMA_BUFFER_SIZE];
 
-extern Int16 right_ping[I2S_DMA_BUFFER_SIZE];
-extern Int16 right_pong[I2S_DMA_BUFFER_SIZE];
+extern Int16 ag_right_ping[I2S_DMA_BUFFER_SIZE];
+extern Int16 ag_right_pong[I2S_DMA_BUFFER_SIZE];
 
 // Equalizer Ping and Pong
-extern Int16 left_ping_eq[I2S_DMA_BUFFER_SIZE];
-extern Int16 left_pong_eq[I2S_DMA_BUFFER_SIZE];
+extern Int16 output_left_ping[I2S_DMA_BUFFER_SIZE];
+extern Int16 output_left_pong[I2S_DMA_BUFFER_SIZE];
 
-extern Int16 right_ping_eq[I2S_DMA_BUFFER_SIZE];
-extern Int16 right_pong_eq[I2S_DMA_BUFFER_SIZE];
+extern Int16 output_right_ping[I2S_DMA_BUFFER_SIZE];
+extern Int16 output_right_pong[I2S_DMA_BUFFER_SIZE];
 
 // Midi buffer
 extern MidiPacket midi_buffer[];

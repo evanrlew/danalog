@@ -18,22 +18,22 @@
 #include "global_vars.h"
 #include "TMS320.H"
 
-#pragma DATA_SECTION(Buffer, "Buffer");
-Int16 Buffer[256];
+//#pragma DATA_SECTION(Buffer, "Buffer");
+//Int16 Buffer[256];
 //#pragma DATA_ALIGN (complex_data, 4)
-#pragma DATA_ALIGN (left_ping_eq, 4)
-Int16 left_ping_eq[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (output_left_ping, 4)
+Int16 output_left_ping[I2S_DMA_BUFFER_SIZE];
 
-#pragma DATA_ALIGN (left_pong_eq, 4)
-Int16 left_pong_eq[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (output_left_pong, 4)
+Int16 output_left_pong[I2S_DMA_BUFFER_SIZE];
 
-#pragma DATA_ALIGN (right_ping_eq, 4)
-Int16 right_ping_eq[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (output_right_ping, 4)
+Int16 output_right_ping[I2S_DMA_BUFFER_SIZE];
 
-#pragma DATA_ALIGN (right_pong_eq, 4)
-Int16 right_pong_eq[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (output_right_pong, 4)
+Int16 output_right_pong[I2S_DMA_BUFFER_SIZE];
 
-Int32 x[128];
+Int16* x;
 Int32 Ak1[3] = {10000, -19794, 9801};
 Int32 Bk1[3] = {102, 0, -102};
 Int32 Ak2[3] = {10000, -17752, 7921};
@@ -82,24 +82,32 @@ Void eq_tsk( Void ) {
 	SinState EQSine;
 	sin_compute_params(&EQSine, 6000);
 	Int16 i;
-	for (i = 0; i < 128; ++i) {
-		x[i] = sin_gen(&EQSine, 0);
+	// determine which buffer to fill
+	if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
+		x = &ag_left_pong;
+		x = &ag_right_pong;
+	} else {
+		x = &ag_left_ping;
+		x = &ag_right_ping;
 	}
-	Next_y1[0] = Bk1[0]*x[0]/Ak1[0];
-	Next_y1[1] = (Bk1[0]*x[1]+Bk1[1]*x[0]-Ak1[1]*y1[0])/Ak1[0];
-	Next_y1[2] = (Bk1[0]*x[2]+Bk1[1]*x[1]+Bk1[2]*x[0]-Ak1[1]*y1[1]-Ak1[2]*y1[0])/Ak1[0];
-	Next_y2[0] = Bk2[0]*x[0]/Ak2[0];
-	Next_y2[1] = (Bk2[0]*x[1]+Bk2[1]*x[0]-Ak2[1]*y2[0])/Ak2[0];
-	Next_y2[2] = (Bk2[0]*x[2]+Bk2[1]*x[1]+Bk2[2]*x[0]-Ak2[1]*y2[1]-Ak2[2]*y2[0])/Ak2[0];
-	Next_y3[0] = Bk3[0]*x[0]/Ak3[0];
-	Next_y3[1] = (Bk3[0]*x[1]+Bk3[1]*x[0]-Ak3[1]*y3[0])/Ak3[0];
-	Next_y3[2] = (Bk3[0]*x[2]+Bk3[1]*x[1]+Bk3[2]*x[0]-Ak3[1]*y3[1]-Ak3[2]*y3[0])/Ak3[0];
-	Next_y4[0] = Bk4[0]*x[0]/Ak4[0];
-	Next_y4[1] = (Bk4[0]*x[1]+Bk4[1]*x[0]-Ak4[1]*y4[0])/Ak4[0];
-	Next_y4[2] = (Bk4[0]*x[2]+Bk4[1]*x[1]+Bk4[2]*x[0]-Ak4[1]*y4[1]-Ak4[2]*y4[0])/Ak4[0];
-	Next_y5[0] = Bk5[0]*x[0]/Ak5[0];
-	Next_y5[1] = (Bk5[0]*x[1]+Bk5[1]*x[0]-Ak5[1]*y5[0])/Ak5[0];
-	Next_y5[2] = (Bk5[0]*x[2]+Bk5[1]*x[1]+Bk5[2]*x[0]-Ak5[1]*y5[1]-Ak5[2]*y5[0])/Ak5[0];
+//	for (i = 0; i < 128; ++i) {
+//		x[i] = sin_gen(&EQSine, 0);
+//	}
+	Next_y1[0] = Bk1[0]*x[0]/Ak1[0]/(pots[0]+1);
+	Next_y1[1] = (Bk1[0]*x[1]+Bk1[1]*x[0]-Ak1[1]*y1[0])/Ak1[0]/(pots[0]+1);
+	Next_y1[2] = (Bk1[0]*x[2]+Bk1[1]*x[1]+Bk1[2]*x[0]-Ak1[1]*y1[1]-Ak1[2]*y1[0])/Ak1[0]/(pots[0]+1);
+	Next_y2[0] = Bk2[0]*x[0]/Ak2[0]/(pots[1]+1);
+	Next_y2[1] = (Bk2[0]*x[1]+Bk2[1]*x[0]-Ak2[1]*y2[0])/Ak2[0]/(pots[1]+1);
+	Next_y2[2] = (Bk2[0]*x[2]+Bk2[1]*x[1]+Bk2[2]*x[0]-Ak2[1]*y2[1]-Ak2[2]*y2[0])/Ak2[0]/(pots[1]+1);
+	Next_y3[0] = Bk3[0]*x[0]/Ak3[0]/(pots[2]+1);
+	Next_y3[1] = (Bk3[0]*x[1]+Bk3[1]*x[0]-Ak3[1]*y3[0])/Ak3[0]/(pots[2]+1);
+	Next_y3[2] = (Bk3[0]*x[2]+Bk3[1]*x[1]+Bk3[2]*x[0]-Ak3[1]*y3[1]-Ak3[2]*y3[0])/Ak3[0]/(pots[2]+1);
+	Next_y4[0] = Bk4[0]*x[0]/Ak4[0]/(pots[3]+1);
+	Next_y4[1] = (Bk4[0]*x[1]+Bk4[1]*x[0]-Ak4[1]*y4[0])/Ak4[0]/(pots[3]+1);
+	Next_y4[2] = (Bk4[0]*x[2]+Bk4[1]*x[1]+Bk4[2]*x[0]-Ak4[1]*y4[1]-Ak4[2]*y4[0])/Ak4[0]/(pots[3]+1);
+	Next_y5[0] = Bk5[0]*x[0]/Ak5[0]/(pots[4]+1);
+	Next_y5[1] = (Bk5[0]*x[1]+Bk5[1]*x[0]-Ak5[1]*y5[0])/Ak5[0]/(pots[4]+1);
+	Next_y5[2] = (Bk5[0]*x[2]+Bk5[1]*x[1]+Bk5[2]*x[0]-Ak5[1]*y5[1]-Ak5[2]*y5[0])/Ak5[0]/(pots[4]+1);
 	while(1) {
 //		Ak1[i]*y1[i]+Ak1[i-1]*y1[i-1]+Ak1[i-2]*y1[i-2] = Bk1[i]*x[i]+Bk1[i-1]*x[i-1]+Bk1[i-2]*x[i-2]
 //		y1[i] = (Bk1[0]*x[i]+Bk1[1]*x[i-1]+Bk1[2]*x[i-2]-Ak1[1]*y1[i-1]-Ak1[2]*y1[i-2])/Ak1[0];
@@ -107,7 +115,7 @@ Void eq_tsk( Void ) {
 		y1[1] = Next_y1[1];
 		y1[2] = Next_y1[2];
 		for (i = 3; i < 128; i++) {
-			y1[i] = (Bk1[0]*x[i]+Bk1[1]*x[i-1]+Bk1[2]*x[i-2]-Ak1[1]*y1[i-1]-Ak1[2]*y1[i-2])/Ak1[0];
+			y1[i] = (Bk1[0]*x[i]+Bk1[1]*x[i-1]+Bk1[2]*x[i-2]-Ak1[1]*y1[i-1]-Ak1[2]*y1[i-2])/Ak1[0]/(pots[0]+1);
 		}
 		Next_y1[0] = y1[125];
 		Next_y1[1] = y1[126];
@@ -117,7 +125,7 @@ Void eq_tsk( Void ) {
 		y2[1] = Next_y2[1];
 		y2[2] = Next_y2[2];
 		for (i = 3; i < 128; i++) {
-			y2[i] = (Bk2[0]*x[i]+Bk2[1]*x[i-1]+Bk2[2]*x[i-2]-Ak2[1]*y2[i-1]-Ak2[2]*y2[i-2])/Ak2[0];
+			y2[i] = (Bk2[0]*x[i]+Bk2[1]*x[i-1]+Bk2[2]*x[i-2]-Ak2[1]*y2[i-1]-Ak2[2]*y2[i-2])/Ak2[0]/(pots[1]+1);
 		}
 		Next_y2[0] = y2[125];
 		Next_y2[1] = y2[126];
@@ -127,7 +135,7 @@ Void eq_tsk( Void ) {
 		y3[1] = Next_y3[1];
 		y3[2] = Next_y3[2];
 		for (i = 3; i < 128; i++) {
-			y3[i] = (Bk3[0]*x[i]+Bk3[1]*x[i-1]+Bk3[2]*x[i-2]-Ak3[1]*y3[i-1]-Ak3[2]*y3[i-2])/Ak3[0];
+			y3[i] = (Bk3[0]*x[i]+Bk3[1]*x[i-1]+Bk3[2]*x[i-2]-Ak3[1]*y3[i-1]-Ak3[2]*y3[i-2])/Ak3[0]/(pots[2]+1);
 		}
 		Next_y3[0] = y3[125];
 		Next_y3[1] = y3[126];
@@ -137,7 +145,7 @@ Void eq_tsk( Void ) {
 		y4[1] = Next_y4[1];
 		y4[2] = Next_y4[2];
 		for (i = 3; i < 128; i++) {
-			y4[i] = (Bk4[0]*x[i]+Bk4[1]*x[i-1]+Bk4[2]*x[i-2]-Ak4[1]*y4[i-1]-Ak4[2]*y4[i-2])/Ak4[0];
+			y4[i] = (Bk4[0]*x[i]+Bk4[1]*x[i-1]+Bk4[2]*x[i-2]-Ak4[1]*y4[i-1]-Ak4[2]*y4[i-2])/Ak4[0]/(pots[3]+1);
 		}
 		Next_y4[0] = y4[125];
 		Next_y4[1] = y4[126];
@@ -147,7 +155,7 @@ Void eq_tsk( Void ) {
 		y5[1] = Next_y5[1];
 		y5[2] = Next_y5[2];
 		for (i = 3; i < 128; i++) {
-			y5[i] = (Bk5[0]*x[i]+Bk5[1]*x[i-1]+Bk5[2]*x[i-2]-Ak5[1]*y5[i-1]-Ak5[2]*y5[i-2])/Ak5[0];
+			y5[i] = (Bk5[0]*x[i]+Bk5[1]*x[i-1]+Bk5[2]*x[i-2]-Ak5[1]*y5[i-1]-Ak5[2]*y5[i-2])/Ak5[0]/(pots[4]+1);
 		}
 		Next_y5[0] = y5[125];
 		Next_y5[1] = y5[126];
@@ -160,11 +168,11 @@ Void eq_tsk( Void ) {
 		// determine which buffer to fill
 		Int16 *left_output, *right_output;
 		if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
-			left_output = left_pong_eq;
-			right_output = right_pong_eq;
+			left_output = output_left_pong;
+			right_output = output_right_pong;
 		} else {
-			left_output = left_ping_eq;
-			right_output = right_ping_eq;
+			left_output = output_left_ping;
+			right_output = output_right_ping;
 		}
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
 			left_output[i] = y[i];

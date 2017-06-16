@@ -24,17 +24,17 @@
 
 
 
-#pragma DATA_ALIGN (left_ping, 4)
-Int16 left_ping[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (ag_left_ping, 4)
+Int16 ag_left_ping[I2S_DMA_BUFFER_SIZE];
 
-#pragma DATA_ALIGN (left_pong, 4)
-Int16 left_pong[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (ag_left_pong, 4)
+Int16 ag_left_pong[I2S_DMA_BUFFER_SIZE];
 
-#pragma DATA_ALIGN (right_ping, 4)
-Int16 right_ping[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (ag_right_ping, 4)
+Int16 ag_right_ping[I2S_DMA_BUFFER_SIZE];
 
-#pragma DATA_ALIGN (right_pong, 4)
-Int16 right_pong[I2S_DMA_BUFFER_SIZE];
+#pragma DATA_ALIGN (ag_right_pong, 4)
+Int16 ag_right_pong[I2S_DMA_BUFFER_SIZE];
 
 
 
@@ -114,7 +114,7 @@ void i2s_dma_init( void )
 	left_dmaConfig.chanDir      = CSL_DMA_WRITE;
 	left_dmaConfig.trfType      = CSL_DMA_TRANSFER_IO_MEMORY;
 	left_dmaConfig.dataLen      = I2S_DMA_BUFFER_SIZE * 4;
-	left_dmaConfig.srcAddr      = (Uint32)left_ping;
+	left_dmaConfig.srcAddr      = (Uint32)output_left_ping;
 	left_dmaConfig.destAddr     = (Uint32)0x2A08;
 
 	left_dmaHandle = DMA_open(CSL_DMA_CHAN4, &left_dmaChannelObj, &status);
@@ -136,7 +136,7 @@ void i2s_dma_init( void )
 	right_dmaConfig.chanDir      = CSL_DMA_WRITE;
 	right_dmaConfig.trfType      = CSL_DMA_TRANSFER_IO_MEMORY;
 	right_dmaConfig.dataLen      = I2S_DMA_BUFFER_SIZE * 4;
-	right_dmaConfig.srcAddr      = (Uint32)right_ping;
+	right_dmaConfig.srcAddr      = (Uint32)output_right_ping;
 	right_dmaConfig.destAddr     = (Uint32)0x2A0C;
 
 	right_dmaHandle = DMA_open(CSL_DMA_CHAN5, &right_dmaChannelObj, &status);

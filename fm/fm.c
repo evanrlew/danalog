@@ -82,11 +82,11 @@ Void generate_samples_tsk( Void )
 		// determine which buffer to fill
 		Int16 *left_output, *right_output;
 		if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
-			left_output = left_pong;
-			right_output = right_pong;
+			left_output = ag_left_pong;
+			right_output = ag_right_pong;
 		} else {
-			left_output = left_ping;
-			right_output = right_ping;
+			left_output = ag_left_ping;
+			right_output = ag_right_ping;
 		}
 
 		Int16 i;
