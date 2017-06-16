@@ -11,11 +11,11 @@
 #include "fm.h"
 #include "../io/midi.h"
 
-#define NOTE_BUF_LEN 2
+#define NOTE_BUF_LEN 3
 
 extern FMNote note_buf[NOTE_BUF_LEN];
 
-void add_note(MidiPacket *p, Int16 mod_ratio);
+void add_note(MidiPacket *p);
 void release_note(MidiPacket *p);
 
 

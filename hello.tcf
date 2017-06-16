@@ -131,6 +131,9 @@ bios.TSK.instance("eq").fxn = prog.extern("eq_tsk");
 bios.SEM.create("output_sem");
 bios.SEM.instance("ping_pong_sem").destroy();
 bios.SEM.create("ag_sem");
+bios.GBL.ENABLEINST = 1;
+bios.GBL.INSTRUMENTED = 1;
+bios.GBL.ENABLEALLTRC = 1;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {

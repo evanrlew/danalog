@@ -9,12 +9,12 @@
 Int16 note_buf_head = 0;
 FMNote note_buf[NOTE_BUF_LEN];
 
-void add_note(MidiPacket *p, Int16 mod_ratio) {
+void add_note(MidiPacket *p) {
 	FMNote *n = &note_buf[note_buf_head];
 	*n = midi_to_fm_note(p);
 
-	sin_compute_params(&n->mod_sin, n->pitch * mod_ratio);
-	sin_compute_params(&n->car_sin,  n->pitch);
+//	sin_compute_params(&n->mod_sin, n->pitch * mod_ratio);
+//	sin_compute_params(&n->car_sin,  n->pitch);
 
 	note_buf_head = (note_buf_head + 1) % NOTE_BUF_LEN;
 }

@@ -31,9 +31,6 @@ EnvelopeConfig mod_env_cfg, car_env_cfg;
 FMNote note;
 
 
-Int16 mod_ratio = 1;
-Int16 mod_depth = 1;
-
 
 FMNote midi_to_fm_note(MidiPacket* p) {
 	FMNote n;
@@ -41,7 +38,7 @@ FMNote midi_to_fm_note(MidiPacket* p) {
 	n.velocity = (Int16) p->velocity;
 	n.mod_env = createEnvelope(&mod_env_cfg);
 	n.car_env = createEnvelope(&car_env_cfg);
-	sin_compute_params(&n.mod_sin, n.pitch * mod_ratio);
+	sin_compute_params(&n.mod_sin, (((Int32) n.pitch) * ((Int32) encoders[10])) >> 4);
 	sin_compute_params(&n.car_sin, n.pitch);
 	return n;
 }
@@ -50,15 +47,11 @@ FMNote midi_to_fm_note(MidiPacket* p) {
 Void generate_samples_tsk( Void )
 {
 
-
-
-	createEnvelopeConfig(&car_env_cfg, 0, 0, 250, 100);
-	createEnvelopeConfig(&mod_env_cfg, 0, 0, 100, 100);
-
 	while (1) {
 		SEM_pend(&ag_sem, SYS_FOREVER);
-		//createEnvelopeConfig(&car_env_cfg, encoders[10], encoders[11], encoders[12], encoders[13]);
-		//createEnvelopeConfig(&mod_env_cfg, encoders[14], encoders[15], encoders[16], encoders[17]);
+		createEnvelopeConfig(&car_env_cfg, encoders[12], encoders[12], encoders[14], encoders[17]);
+		createEnvelopeConfig(&mod_env_cfg, encoders[13], encoders[13], encoders[15], encoders[17]);
+
 
 		MidiPacket p;
 		if (midi_buffer_size() > 0) {
@@ -66,7 +59,7 @@ Void generate_samples_tsk( Void )
 				p = midi_buffer_read();
 
 				if (midi_packet_type(p) == MIDI_NOTE_ON) {
-					add_note(&p, mod_ratio);
+					add_note(&p);
 				}
 				else if (midi_packet_type(p) == MIDI_NOTE_OFF) { // MIDI_NOTE_OFF
 					release_note(&p);
@@ -94,11 +87,12 @@ Void generate_samples_tsk( Void )
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
 			Int16 output = 0;
 			Int16 counter;
+#pragma MUST_ITERATE(NOTE_BUF_LEN,NOTE_BUF_LEN)
 			for (counter = 0; counter < NOTE_BUF_LEN; counter++) {
 				FMNote *n = &note_buf[counter];
 				if (n->car_env.env_state != ENV_INACTIVE) {
-					Int32 mod = ((envelopeIncrement(&n->mod_env) * (Int32) sin_gen(&n->mod_sin, 0))) >> 8;
-					Int32 mod_scaled = (mod >> 3) * mod_depth;
+					Int32 mod = ((envelopeIncrement(&n->mod_env) * (Int32) sin_gen(&n->mod_sin, encoders[16] << 5))) >> 8;
+					Int32 mod_scaled = mod * ((Int32) encoders[11]) >> 6;
 
 					output += ((envelopeIncrement(&n->car_env) * (Int32) sin_gen(&n->car_sin, mod_scaled))) >> 10;
 				}
