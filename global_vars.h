@@ -27,6 +27,13 @@ extern Int16 left_pong[I2S_DMA_BUFFER_SIZE];
 extern Int16 right_ping[I2S_DMA_BUFFER_SIZE];
 extern Int16 right_pong[I2S_DMA_BUFFER_SIZE];
 
+// Equalizer Ping and Pong
+extern Int16 left_ping_eq[I2S_DMA_BUFFER_SIZE];
+extern Int16 left_pong_eq[I2S_DMA_BUFFER_SIZE];
+
+extern Int16 right_ping_eq[I2S_DMA_BUFFER_SIZE];
+extern Int16 right_pong_eq[I2S_DMA_BUFFER_SIZE];
+
 // Midi buffer
 extern MidiPacket midi_buffer[];
 

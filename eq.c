@@ -21,6 +21,17 @@
 #pragma DATA_SECTION(Buffer, "Buffer");
 Int16 Buffer[256];
 //#pragma DATA_ALIGN (complex_data, 4)
+#pragma DATA_ALIGN (left_ping_eq, 4)
+Int16 left_ping_eq[I2S_DMA_BUFFER_SIZE];
+
+#pragma DATA_ALIGN (left_pong_eq, 4)
+Int16 left_pong_eq[I2S_DMA_BUFFER_SIZE];
+
+#pragma DATA_ALIGN (right_ping_eq, 4)
+Int16 right_ping_eq[I2S_DMA_BUFFER_SIZE];
+
+#pragma DATA_ALIGN (right_pong_eq, 4)
+Int16 right_pong_eq[I2S_DMA_BUFFER_SIZE];
 
 Int32 x[128];
 Int32 Ak1[3] = {10000, -19794, 9801};
@@ -36,9 +47,13 @@ Int32 Bk5[3] = {3257, 0, -3257};
 Int32 y1[128] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 Int32 Next_y1[128];
 Int32 y2[128];
+Int32 Next_y2[128];
 Int32 y3[128];
+Int32 Next_y3[128];
 Int32 y4[128];
+Int32 Next_y4[128];
 Int32 y5[128];
+Int32 Next_y5[128];
 Int32 y[128];
 Int32 First_Term = 0;
 Int32 Second_Term = 0;
@@ -73,6 +88,18 @@ Void eq_tsk( Void ) {
 	Next_y1[0] = Bk1[0]*x[0]/Ak1[0];
 	Next_y1[1] = (Bk1[0]*x[1]+Bk1[1]*x[0]-Ak1[1]*y1[0])/Ak1[0];
 	Next_y1[2] = (Bk1[0]*x[2]+Bk1[1]*x[1]+Bk1[2]*x[0]-Ak1[1]*y1[1]-Ak1[2]*y1[0])/Ak1[0];
+	Next_y2[0] = Bk2[0]*x[0]/Ak2[0];
+	Next_y2[1] = (Bk2[0]*x[1]+Bk2[1]*x[0]-Ak2[1]*y2[0])/Ak2[0];
+	Next_y2[2] = (Bk2[0]*x[2]+Bk2[1]*x[1]+Bk2[2]*x[0]-Ak2[1]*y2[1]-Ak2[2]*y2[0])/Ak2[0];
+	Next_y3[0] = Bk3[0]*x[0]/Ak3[0];
+	Next_y3[1] = (Bk3[0]*x[1]+Bk3[1]*x[0]-Ak3[1]*y3[0])/Ak3[0];
+	Next_y3[2] = (Bk3[0]*x[2]+Bk3[1]*x[1]+Bk3[2]*x[0]-Ak3[1]*y3[1]-Ak3[2]*y3[0])/Ak3[0];
+	Next_y4[0] = Bk4[0]*x[0]/Ak4[0];
+	Next_y4[1] = (Bk4[0]*x[1]+Bk4[1]*x[0]-Ak4[1]*y4[0])/Ak4[0];
+	Next_y4[2] = (Bk4[0]*x[2]+Bk4[1]*x[1]+Bk4[2]*x[0]-Ak4[1]*y4[1]-Ak4[2]*y4[0])/Ak4[0];
+	Next_y5[0] = Bk5[0]*x[0]/Ak5[0];
+	Next_y5[1] = (Bk5[0]*x[1]+Bk5[1]*x[0]-Ak5[1]*y5[0])/Ak5[0];
+	Next_y5[2] = (Bk5[0]*x[2]+Bk5[1]*x[1]+Bk5[2]*x[0]-Ak5[1]*y5[1]-Ak5[2]*y5[0])/Ak5[0];
 	while(1) {
 //		Ak1[i]*y1[i]+Ak1[i-1]*y1[i-1]+Ak1[i-2]*y1[i-2] = Bk1[i]*x[i]+Bk1[i-1]*x[i-1]+Bk1[i-2]*x[i-2]
 //		y1[i] = (Bk1[0]*x[i]+Bk1[1]*x[i-1]+Bk1[2]*x[i-2]-Ak1[1]*y1[i-1]-Ak1[2]*y1[i-2])/Ak1[0];
@@ -85,6 +112,64 @@ Void eq_tsk( Void ) {
 		Next_y1[0] = y1[125];
 		Next_y1[1] = y1[126];
 		Next_y1[2] = y1[127];
+		//there is only one Bandpass done now
+		y2[0] = Next_y2[0];
+		y2[1] = Next_y2[1];
+		y2[2] = Next_y2[2];
+		for (i = 3; i < 128; i++) {
+			y2[i] = (Bk2[0]*x[i]+Bk2[1]*x[i-1]+Bk2[2]*x[i-2]-Ak2[1]*y2[i-1]-Ak2[2]*y2[i-2])/Ak2[0];
+		}
+		Next_y2[0] = y2[125];
+		Next_y2[1] = y2[126];
+		Next_y2[2] = y2[127];
+		// there is now two bandpasses done
+		y3[0] = Next_y3[0];
+		y3[1] = Next_y3[1];
+		y3[2] = Next_y3[2];
+		for (i = 3; i < 128; i++) {
+			y3[i] = (Bk3[0]*x[i]+Bk3[1]*x[i-1]+Bk3[2]*x[i-2]-Ak3[1]*y3[i-1]-Ak3[2]*y3[i-2])/Ak3[0];
+		}
+		Next_y3[0] = y3[125];
+		Next_y3[1] = y3[126];
+		Next_y3[2] = y3[127];
+		// there is now three bandpasses done
+		y4[0] = Next_y4[0];
+		y4[1] = Next_y4[1];
+		y4[2] = Next_y4[2];
+		for (i = 3; i < 128; i++) {
+			y4[i] = (Bk4[0]*x[i]+Bk4[1]*x[i-1]+Bk4[2]*x[i-2]-Ak4[1]*y4[i-1]-Ak4[2]*y4[i-2])/Ak4[0];
+		}
+		Next_y4[0] = y4[125];
+		Next_y4[1] = y4[126];
+		Next_y4[2] = y4[127];
+		// fourth bandpass complete
+		y5[0] = Next_y5[0];
+		y5[1] = Next_y5[1];
+		y5[2] = Next_y5[2];
+		for (i = 3; i < 128; i++) {
+			y5[i] = (Bk5[0]*x[i]+Bk5[1]*x[i-1]+Bk5[2]*x[i-2]-Ak5[1]*y5[i-1]-Ak5[2]*y5[i-2])/Ak5[0];
+		}
+		Next_y5[0] = y5[125];
+		Next_y5[1] = y5[126];
+		Next_y5[2] = y5[127];
+		// fifth bandpass complete
+		//combine into y[]
+		for (i = 0; i < 128; i++) {
+			y[i] = y1[i]/5 + y2[i]/5 + y3[i]/5 + y4[i]/5 + y5[i]/5;
+		}
+		// determine which buffer to fill
+		Int16 *left_output, *right_output;
+		if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
+			left_output = left_pong_eq;
+			right_output = right_pong_eq;
+		} else {
+			left_output = left_ping_eq;
+			right_output = right_ping_eq;
+		}
+		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
+			left_output[i] = y[i];
+			right_output[i] = y[i];
+		}
 //		First_Term = Bk[0]*x[0];
 //		y[0] = First_Term/Ak;
 //		First_Term = Bk[0]*x[1];
