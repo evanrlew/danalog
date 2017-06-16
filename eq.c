@@ -18,6 +18,10 @@
 #include "global_vars.h"
 #include "TMS320.H"
 
+/* DSP/BIOS headers */
+#include "hellocfg.h"
+
+
 //#pragma DATA_SECTION(Buffer, "Buffer");
 //Int16 Buffer[256];
 //#pragma DATA_ALIGN (complex_data, 4)
@@ -34,8 +38,8 @@ Int16 output_right_ping[I2S_DMA_BUFFER_SIZE];
 Int16 output_right_pong[I2S_DMA_BUFFER_SIZE];
 
 Int16* x;
-Int32 Ak1[3] = {10000, -19794, 9801};
-Int32 Bk1[3] = {102, 0, -102};
+Int32 Ak1[3] = {10000, -15996, 6401};
+Int32 Bk1[3] = {1799, 0, -1799};
 Int32 Ak2[3] = {10000, -17752, 7921};
 Int32 Bk2[3] = {1043, 0, -1043};
 Int32 Ak3[3] = {10000, -15416, 6241};
@@ -83,13 +87,7 @@ Void eq_tsk( Void ) {
 	sin_compute_params(&EQSine, 6000);
 	Int16 i;
 	// determine which buffer to fill
-	if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
-		x = &ag_left_pong;
-		x = &ag_right_pong;
-	} else {
-		x = &ag_left_ping;
-		x = &ag_right_ping;
-	}
+
 //	for (i = 0; i < 128; ++i) {
 //		x[i] = sin_gen(&EQSine, 0);
 //	}
@@ -109,6 +107,15 @@ Void eq_tsk( Void ) {
 	Next_y5[1] = (Bk5[0]*x[1]+Bk5[1]*x[0]-Ak5[1]*y5[0])/Ak5[0]/(pots[4]+1);
 	Next_y5[2] = (Bk5[0]*x[2]+Bk5[1]*x[1]+Bk5[2]*x[0]-Ak5[1]*y5[1]-Ak5[2]*y5[0])/Ak5[0]/(pots[4]+1);
 	while(1) {
+		SEM_pend(&output_sem, SYS_FOREVER);
+		SEM_post(&ag_sem);
+		if (CSL_DMA1_REGS->DMACH0TCR2 & 0x0002) { // last xfer: pong
+			x = &ag_left_pong;
+			x = &ag_right_pong;
+		} else {
+			x = &ag_left_ping;
+			x = &ag_right_ping;
+		}
 //		Ak1[i]*y1[i]+Ak1[i-1]*y1[i-1]+Ak1[i-2]*y1[i-2] = Bk1[i]*x[i]+Bk1[i-1]*x[i-1]+Bk1[i-2]*x[i-2]
 //		y1[i] = (Bk1[0]*x[i]+Bk1[1]*x[i-1]+Bk1[2]*x[i-2]-Ak1[1]*y1[i-1]-Ak1[2]*y1[i-2])/Ak1[0];
 		y1[0] = Next_y1[0];
@@ -175,8 +182,8 @@ Void eq_tsk( Void ) {
 			right_output = output_right_ping;
 		}
 		for (i = 0; i < I2S_DMA_BUFFER_SIZE; i++) {
-			left_output[i] = y[i];
-			right_output[i] = y[i];
+			left_output[i] = y1[i];
+			right_output[i] = y1[i];
 		}
 //		First_Term = Bk[0]*x[0];
 //		y[0] = First_Term/Ak;

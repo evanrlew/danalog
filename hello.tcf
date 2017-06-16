@@ -128,6 +128,9 @@ bios.TSK.instance("eq").order = 5;
 bios.TSK.instance("eq").comment = "_eq_tsk";
 bios.TSK.instance("eq").comment = "";
 bios.TSK.instance("eq").fxn = prog.extern("eq_tsk");
+bios.SEM.create("output_sem");
+bios.SEM.instance("ping_pong_sem").destroy();
+bios.SEM.create("ag_sem");
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {
