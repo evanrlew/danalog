@@ -134,6 +134,11 @@ bios.SEM.create("ag_sem");
 bios.GBL.ENABLEINST = 1;
 bios.GBL.INSTRUMENTED = 1;
 bios.GBL.ENABLEALLTRC = 1;
+bios.TSK.instance("TSK_idle").order = 1;
+bios.TSK.instance("spiSlow").order = 2;
+bios.TSK.instance("spiFast").order = 3;
+bios.TSK.instance("audio").order = 4;
+bios.TSK.instance("eq").priority = 2;
 // !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
 
 if (config.hasReportedError == false) {

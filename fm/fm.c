@@ -49,6 +49,7 @@ Void generate_samples_tsk( Void )
 
 	while (1) {
 		SEM_pend(&ag_sem, SYS_FOREVER);
+		SEM_post(&output_sem);
 		createEnvelopeConfig(&car_env_cfg, encoders[12], encoders[12], encoders[14], encoders[17]);
 		createEnvelopeConfig(&mod_env_cfg, encoders[13], encoders[13], encoders[15], encoders[17]);
 

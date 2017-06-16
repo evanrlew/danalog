@@ -160,7 +160,7 @@ void i2s_dma_init( void )
 
 void dma_isr(void) {
 	if (CSL_SYSCTRL_REGS->DMAIFR & 0x0010) { // ch4 interrupt, left channel
-		SEM_post(&output_sem);
+		SEM_post(&ag_sem);
 		CSL_SYSCTRL_REGS->DMAIFR |= 0x0010; // clear interrupt
 	} else {
 		while(1);
