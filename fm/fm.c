@@ -56,7 +56,7 @@ Void generate_samples_tsk( Void )
 	createEnvelopeConfig(&mod_env_cfg, 0, 0, 100, 100);
 
 	while (1) {
-		SEM_pend(&ping_pong_sem, SYS_FOREVER);
+		SEM_pend(&ag_sem, SYS_FOREVER);
 		//createEnvelopeConfig(&car_env_cfg, encoders[10], encoders[11], encoders[12], encoders[13]);
 		//createEnvelopeConfig(&mod_env_cfg, encoders[14], encoders[15], encoders[16], encoders[17]);
 
