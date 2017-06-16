@@ -23,8 +23,8 @@ Int16 Buffer[256];
 //#pragma DATA_ALIGN (complex_data, 4)
 
 Int32 x[128];
-Int32 Bk[3] = {10, 14, 10};
-Int32 Ak = 34;
+Int32 Bk[3] = {1000, -1732, 1000};
+Int32 Ak = 1000;
 Int32 y[128];
 Int32 First_Term = 0;
 Int32 Second_Term = 0;
@@ -55,17 +55,14 @@ Void eq_tsk( Void ) {
 	Int16 i;
 	while(1) {
 		// eq code
-		printf("\nSine Wave ");
+		//printf("\nSine Wave ");
 		for (i = 0; i < 128; ++i) {
 			x[i] = sin_gen(&EQSine, 0);
-			x[i] = x[i]/2048;
 		//	printf("%d,", x[i]);
 		}
 
-		printf("\nFilter ");
+		//printf("\nFilter ");
 		First_Term = Bk[0]*x[0];
-		Second_Term = 0;
-		Third_Term = 0;
 		y[0] = First_Term/Ak;
 		First_Term = Bk[0]*x[1];
 		Second_Term = Bk[1]*x[0];
